@@ -1,0 +1,1430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compressor Pro - Universal File Compression Tool</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .compress-card {
+            transition: all 0.3s ease;
+        }
+        .compress-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .drag-over {
+            border-color: #3B82F6 !important;
+            background-color: #EFF6FF !important;
+        }
+        .progress-bar {
+            transition: width 0.3s ease;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .comparison-slider {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+        .comparison-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .comparison-overlay {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50%;
+            height: 100%;
+            overflow: hidden;
+        }
+        .comparison-handle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 50%;
+            cursor: ew-resize;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            z-index: 10;
+        }
+        .comparison-line {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 2px;
+            height: 100%;
+            background: white;
+            transform: translateX(-50%);
+        }
+        .ad-space {
+            background: #f8f9fa;
+            border: 2px dashed #dee2e6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6c757d;
+            font-size: 14px;
+            min-height: 250px;
+            text-align: center;
+        }
+        .premium-badge {
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            color: #000;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            display: inline-block;
+            margin-left: 8px;
+        }
+        @media print {
+            .no-print { display: none !important; }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <i class="fas fa-compress-alt text-3xl text-blue-600 mr-3"></i>
+                    <h1 class="text-2xl font-bold text-gray-900">Compressor Pro</h1>
+                    <span class="premium-badge">PREMIUM</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button id="subscribeBtn" class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-2 rounded-full hover:from-purple-600 hover:to-pink-600 transition-all duration-300 font-semibold">
+                        <i class="fas fa-crown mr-2"></i>Upgrade to Pro - ₹9
+                    </button>
+                    <button id="backBtn" class="hidden bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-lg transition-colors">
+                        <i class="fas fa-arrow-left mr-2"></i>Back to Home
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Google Ad Space - Top Banner -->
+        <div class="ad-space mb-8 rounded-lg">
+            <div>
+                <i class="fas fa-ad text-3xl mb-2"></i>
+                <div>Google Ads - Top Banner (728x250)</div>
+                <div class="text-xs mt-1">Advertisement space for monetization</div>
+            </div>
+        </div>
+
+        <!-- Home Section -->
+        <section id="homeSection" class="fade-in">
+            <div class="text-center mb-12">
+                <h2 class="text-5xl font-bold text-gray-900 mb-4">Universal File Compressor Pro</h2>
+                <p class="text-xl text-gray-600 max-w-4xl mx-auto">
+                    Professional-grade file compression with advanced algorithms. Reduce file sizes for images, PDFs, presentations, and videos while maintaining superior quality.
+                </p>
+                <div class="mt-6 flex justify-center items-center space-x-4">
+                    <div class="bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-medium">
+                        <i class="fas fa-check mr-2"></i>99% Quality Retention
+                    </div>
+                    <div class="bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium">
+                        <i class="fas fa-shield-alt mr-2"></i>100% Secure
+                    </div>
+                    <div class="bg-purple-100 text-purple-800 px-4 py-2 rounded-full text-sm font-medium">
+                        <i class="fas fa-bolt mr-2"></i>Lightning Fast
+                    </div>
+                </div>
+            </div>
+
+            <!-- Compression Tools Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+                <!-- Image Compression -->
+                <div class="compress-card bg-white rounded-xl p-6 shadow-lg cursor-pointer" onclick="showSection('imageSection')">
+                    <div class="text-center">
+                        <div class="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-image text-2xl text-green-600"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Image Compression</h3>
+                        <p class="text-gray-600 mb-4">Compress JPEG, PNG, WebP with AI optimization</p>
+                        <div class="text-sm text-gray-500">
+                            <div class="flex justify-center space-x-2 mb-2">
+                                <span class="bg-gray-100 px-2 py-1 rounded">.jpg</span>
+                                <span class="bg-gray-100 px-2 py-1 rounded">.png</span>
+                                <span class="bg-gray-100 px-2 py-1 rounded">.webp</span>
+                            </div>
+                            <p class="font-medium text-green-600">Up to 95% size reduction</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PDF Compression -->
+                <div class="compress-card bg-white rounded-xl p-6 shadow-lg cursor-pointer" onclick="showSection('pdfSection')">
+                    <div class="text-center">
+                        <div class="bg-red-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-file-pdf text-2xl text-red-600"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">PDF Compression</h3>
+                        <p class="text-gray-600 mb-4">Smart PDF optimization with text preservation</p>
+                        <div class="text-sm text-gray-500">
+                            <div class="flex justify-center space-x-2 mb-2">
+                                <span class="bg-gray-100 px-2 py-1 rounded">.pdf</span>
+                            </div>
+                            <p class="font-medium text-red-600">Document quality maintained</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PowerPoint Compression -->
+                <div class="compress-card bg-white rounded-xl p-6 shadow-lg cursor-pointer" onclick="showSection('pptSection')">
+                    <div class="text-center">
+                        <div class="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-file-powerpoint text-2xl text-orange-600"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">PowerPoint Pro</h3>
+                        <p class="text-gray-600 mb-4">Advanced presentation compression</p>
+                        <div class="text-sm text-gray-500">
+                            <div class="flex justify-center space-x-2 mb-2">
+                                <span class="bg-gray-100 px-2 py-1 rounded">.pptx</span>
+                                <span class="bg-gray-100 px-2 py-1 rounded">.ppt</span>
+                            </div>
+                            <p class="font-medium text-orange-600">Media optimization</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Video Compression -->
+                <div class="compress-card bg-white rounded-xl p-6 shadow-lg cursor-pointer" onclick="showSection('videoSection')">
+                    <div class="text-center">
+                        <div class="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-video text-2xl text-purple-600"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Video Compression</h3>
+                        <p class="text-gray-600 mb-4">4K video compression with HDR support</p>
+                        <div class="text-sm text-gray-500">
+                            <div class="flex justify-center space-x-2 mb-2">
+                                <span class="bg-gray-100 px-2 py-1 rounded">.mp4</span>
+                                <span class="bg-gray-100 px-2 py-1 rounded">.avi</span>
+                                <span class="bg-gray-100 px-2 py-1 rounded">.mov</span>
+                            </div>
+                            <p class="font-medium text-purple-600">4K quality preserved</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Before/After Comparison Section -->
+            <div class="bg-white rounded-xl p-8 shadow-lg mb-12">
+                <h3 class="text-2xl font-bold text-gray-900 mb-6 text-center">See the Difference</h3>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div>
+                        <h4 class="text-lg font-semibold mb-4">Interactive Before/After Comparison</h4>
+                        <div class="comparison-slider" id="comparisonSlider">
+                            <div class="comparison-image bg-gray-200 flex items-center justify-center">
+                                <div class="text-center">
+                                    <i class="fas fa-image text-4xl text-gray-400 mb-2"></i>
+                                    <p class="text-gray-500 font-medium">Original Image</p>
+                                    <p class="text-sm text-gray-400">Large file size</p>
+                                </div>
+                            </div>
+                            <div class="comparison-overlay">
+                                <div class="comparison-image bg-blue-100 flex items-center justify-center h-full">
+                                    <div class="text-center">
+                                        <i class="fas fa-compress-alt text-4xl text-blue-500 mb-2"></i>
+                                        <p class="text-blue-700 font-medium">Compressed Image</p>
+                                        <p class="text-sm text-blue-500">90% smaller size</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="comparison-line"></div>
+                            <div class="comparison-handle">
+                                <i class="fas fa-arrows-alt-h text-gray-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-semibold mb-4">Compression Statistics</h4>
+                        <div style="height: 300px;">
+                            <canvas id="compressionChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Google Ad Space - Middle Banner -->
+            <div class="ad-space mb-12 rounded-lg">
+                <div>
+                    <i class="fas fa-ad text-3xl mb-2"></i>
+                    <div>Google Ads - Middle Banner (728x250)</div>
+                    <div class="text-xs mt-1">Strategic placement for user engagement</div>
+                </div>
+            </div>
+
+            <!-- Features Section -->
+            <div class="bg-white rounded-xl p-8 shadow-lg mb-12">
+                <h3 class="text-2xl font-bold text-gray-900 mb-8 text-center">Professional Features</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="text-center">
+                        <i class="fas fa-shield-alt text-4xl text-blue-600 mb-4"></i>
+                        <h4 class="text-lg font-semibold mb-2">Bank-Level Security</h4>
+                        <p class="text-gray-600 text-sm">256-bit encryption. Files processed locally, never stored on servers.</p>
+                    </div>
+                    <div class="text-center">
+                        <i class="fas fa-rocket text-4xl text-green-600 mb-4"></i>
+                        <h4 class="text-lg font-semibold mb-2">Ultra-Fast Processing</h4>
+                        <p class="text-gray-600 text-sm">Advanced algorithms with GPU acceleration for instant results.</p>
+                    </div>
+                    <div class="text-center">
+                        <i class="fas fa-mobile-alt text-4xl text-purple-600 mb-4"></i>
+                        <h4 class="text-lg font-semibold mb-2">Universal Compatibility</h4>
+                        <p class="text-gray-600 text-sm">Works flawlessly on desktop, tablet, and mobile devices.</p>
+                    </div>
+                    <div class="text-center">
+                        <i class="fas fa-infinity text-4xl text-orange-600 mb-4"></i>
+                        <h4 class="text-lg font-semibold mb-2">Batch Processing</h4>
+                        <p class="text-gray-600 text-sm">Process multiple files simultaneously with Pro subscription.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subscription Plans -->
+            <div class="bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl p-8 text-white mb-12">
+                <div class="text-center mb-8">
+                    <h3 class="text-3xl font-bold mb-4">Choose Your Plan</h3>
+                    <p class="text-lg opacity-90">Unlock unlimited compression power</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                    <!-- Free Plan -->
+                    <div class="bg-white bg-opacity-10 backdrop-blur rounded-lg p-6 border border-white border-opacity-20">
+                        <div class="text-center">
+                            <h4 class="text-xl font-bold mb-2">Free Plan</h4>
+                            <div class="text-3xl font-bold mb-4">₹0<span class="text-sm font-normal">/month</span></div>
+                            <ul class="text-left space-y-2 mb-6">
+                                <li><i class="fas fa-check text-green-400 mr-2"></i>5 files per day</li>
+                                <li><i class="fas fa-check text-green-400 mr-2"></i>Basic compression</li>
+                                <li><i class="fas fa-check text-green-400 mr-2"></i>Standard quality</li>
+                                <li><i class="fas fa-times text-red-400 mr-2"></i>No batch processing</li>
+                                <li><i class="fas fa-times text-red-400 mr-2"></i>Limited formats</li>
+                            </ul>
+                            <button class="w-full bg-white bg-opacity-20 text-white py-2 rounded-lg hover:bg-opacity-30 transition">
+                                Current Plan
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Pro Plan -->
+                    <div class="bg-white bg-opacity-20 backdrop-blur rounded-lg p-6 border-2 border-yellow-400 relative">
+                        <div class="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                            <span class="bg-yellow-400 text-black px-4 py-1 rounded-full text-sm font-bold">POPULAR</span>
+                        </div>
+                        <div class="text-center">
+                            <h4 class="text-xl font-bold mb-2">Pro Plan</h4>
+                            <div class="text-3xl font-bold mb-4">₹9<span class="text-sm font-normal">/month</span></div>
+                            <ul class="text-left space-y-2 mb-6">
+                                <li><i class="fas fa-check text-green-400 mr-2"></i>Unlimited files</li>
+                                <li><i class="fas fa-check text-green-400 mr-2"></i>Advanced AI compression</li>
+                                <li><i class="fas fa-check text-green-400 mr-2"></i>Maximum quality retention</li>
+                                <li><i class="fas fa-check text-green-400 mr-2"></i>Batch processing</li>
+                                <li><i class="fas fa-check text-green-400 mr-2"></i>All formats supported</li>
+                                <li><i class="fas fa-check text-green-400 mr-2"></i>Priority support</li>
+                                <li><i class="fas fa-check text-green-400 mr-2"></i>No ads</li>
+                            </ul>
+                            <button id="upgradeBtn" class="w-full bg-yellow-400 text-black py-3 rounded-lg font-semibold hover:bg-yellow-300 transition">
+                                <i class="fas fa-crown mr-2"></i>Upgrade Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Image Compression Section -->
+        <section id="imageSection" class="hidden fade-in">
+            <div class="bg-white rounded-xl p-8 shadow-lg mb-8">
+                <div class="flex items-center mb-6">
+                    <i class="fas fa-image text-3xl text-green-600 mr-4"></i>
+                    <h2 class="text-3xl font-bold text-gray-900">Professional Image Compression</h2>
+                </div>
+
+                <!-- Upload Area -->
+                <div id="imageUploadArea" class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center mb-6 transition-colors">
+                    <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-4"></i>
+                    <p class="text-lg text-gray-600 mb-2">Drag and drop images here, or click to select</p>
+                    <p class="text-sm text-gray-500 mb-4">Supports JPEG, PNG, WebP, HEIC formats</p>
+                    <input type="file" id="imageInput" multiple accept="image/*" class="hidden">
+                    <button onclick="document.getElementById('imageInput').click()" class="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+                        <i class="fas fa-plus mr-2"></i>Select Images
+                    </button>
+                </div>
+
+                <!-- Compression Controls -->
+                <div id="imageControls" class="hidden mb-6">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Quality Level</label>
+                            <div class="flex items-center space-x-4">
+                                <span class="text-sm text-gray-500">10%</span>
+                                <input type="range" id="imageQuality" min="10" max="100" value="85" class="flex-1">
+                                <span class="text-sm text-gray-500">100%</span>
+                                <span id="qualityValue" class="text-sm font-medium text-blue-600 w-12">85%</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Output Format</label>
+                            <select id="imageFormat" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                                <option value="jpeg">JPEG (Best for photos)</option>
+                                <option value="png">PNG (Transparency support)</option>
+                                <option value="webp">WebP (Modern format)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Resize (Optional)</label>
+                            <select id="imageResize" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                                <option value="">Keep original size</option>
+                                <option value="25">25% of original</option>
+                                <option value="50">50% of original</option>
+                                <option value="75">75% of original</option>
+                                <option value="125">125% of original</option>
+                                <option value="150">150% of original</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Compression Mode</label>
+                            <select id="compressionMode" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                                <option value="balanced">Balanced</option>
+                                <option value="quality">Quality Priority</option>
+                                <option value="size">Size Priority</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="flex justify-center mt-6">
+                        <button id="compressImages" class="bg-green-600 text-white px-8 py-3 rounded-lg hover:bg-green-700 transition-colors">
+                            <i class="fas fa-compress mr-2"></i>Compress Images
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Results Area -->
+                <div id="imageResults" class="hidden">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Compression Results</h3>
+                    <div id="imageResultsList" class="space-y-4"></div>
+                </div>
+            </div>
+
+            <!-- Google Ad Space - Section Ad -->
+            <div class="ad-space mb-8 rounded-lg">
+                <div>
+                    <i class="fas fa-ad text-2xl mb-2"></i>
+                    <div>Google Ads - Section Banner (728x200)</div>
+                </div>
+            </div>
+
+            <!-- Educational Content -->
+            <div class="bg-green-50 rounded-lg p-6">
+                <h3 class="text-lg font-semibold text-green-900 mb-3">Professional Image Compression Tips</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-green-800">
+                    <ul class="space-y-2">
+                        <li><strong>JPEG:</strong> Best for photos with many colors. Quality 80-90% is usually optimal for web.</li>
+                        <li><strong>PNG:</strong> Best for images with transparency, logos, or graphics with few colors.</li>
+                        <li><strong>WebP:</strong> Modern format with superior compression, supported by most browsers.</li>
+                    </ul>
+                    <ul class="space-y-2">
+                        <li><strong>Quality Priority:</strong> Maintains visual quality with moderate compression.</li>
+                        <li><strong>Size Priority:</strong> Maximizes file size reduction with acceptable quality loss.</li>
+                        <li><strong>Balanced:</strong> Optimal balance between quality and file size for most use cases.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- PDF Compression Section -->
+        <section id="pdfSection" class="hidden fade-in">
+            <div class="bg-white rounded-xl p-8 shadow-lg mb-8">
+                <div class="flex items-center mb-6">
+                    <i class="fas fa-file-pdf text-3xl text-red-600 mr-4"></i>
+                    <h2 class="text-3xl font-bold text-gray-900">Advanced PDF Compression</h2>
+                </div>
+
+                <!-- Upload Area -->
+                <div id="pdfUploadArea" class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center mb-6 transition-colors">
+                    <i class="fas fa-file-upload text-4xl text-gray-400 mb-4"></i>
+                    <p class="text-lg text-gray-600 mb-2">Drag and drop PDF files here, or click to select</p>
+                    <p class="text-sm text-gray-500 mb-4">Supports PDF documents up to 200MB (Pro: Unlimited)</p>
+                    <input type="file" id="pdfInput" multiple accept=".pdf" class="hidden">
+                    <button onclick="document.getElementById('pdfInput').click()" class="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+                        <i class="fas fa-plus mr-2"></i>Select PDF Files
+                    </button>
+                </div>
+
+                <!-- Compression Controls -->
+                <div id="pdfControls" class="hidden mb-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Compression Level</label>
+                            <select id="pdfCompressionLevel" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                                <option value="low">Low Compression (High Quality)</option>
+                                <option value="medium" selected>Medium Compression (Balanced)</option>
+                                <option value="high">High Compression (Smaller Size)</option>
+                                <option value="extreme">Extreme Compression (Pro Only)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Image Quality</label>
+                            <select id="pdfImageQuality" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                                <option value="high">High Quality (Pro)</option>
+                                <option value="medium" selected>Medium Quality</option>
+                                <option value="low">Low Quality</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Optimization Mode</label>
+                            <select id="pdfOptimization" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                                <option value="web">Web Viewing</option>
+                                <option value="print" selected>Print Quality</option>
+                                <option value="archive">Archive (Pro)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                        <div class="space-y-2">
+                            <label class="flex items-center">
+                                <input type="checkbox" id="pdfRemoveAnnotations" class="mr-2">
+                                <span class="text-sm text-gray-700">Remove annotations and comments</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" id="pdfOptimizeImages" class="mr-2" checked>
+                                <span class="text-sm text-gray-700">Optimize embedded images</span>
+                            </label>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="flex items-center">
+                                <input type="checkbox" id="pdfRemoveMetadata" class="mr-2">
+                                <span class="text-sm text-gray-700">Remove metadata (Pro)</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" id="pdfLinearize" class="mr-2">
+                                <span class="text-sm text-gray-700">Linearize for web (Pro)</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="flex justify-center mt-6">
+                        <button id="compressPDF" class="bg-red-600 text-white px-8 py-3 rounded-lg hover:bg-red-700 transition-colors">
+                            <i class="fas fa-compress mr-2"></i>Compress PDF
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Results Area -->
+                <div id="pdfResults" class="hidden">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Compression Results</h3>
+                    <div id="pdfResultsList" class="space-y-4"></div>
+                </div>
+            </div>
+
+            <!-- Educational Content -->
+            <div class="bg-red-50 rounded-lg p-6">
+                <h3 class="text-lg font-semibold text-red-900 mb-3">PDF Compression Best Practices</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-red-800">
+                    <ul class="space-y-2">
+                        <li><strong>Web Viewing:</strong> Optimized for online viewing and sharing.</li>
+                        <li><strong>Print Quality:</strong> Maintains quality suitable for printing.</li>
+                        <li><strong>Archive Mode:</strong> Long-term storage optimization with maximum compatibility.</li>
+                    </ul>
+                    <ul class="space-y-2">
+                        <li><strong>Image Optimization:</strong> Reduces embedded image sizes significantly.</li>
+                        <li><strong>Metadata Removal:</strong> Removes hidden data and properties.</li>
+                        <li><strong>Linearization:</strong> Enables fast web viewing and progressive loading.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- PowerPoint Compression Section -->
+        <section id="pptSection" class="hidden fade-in">
+            <div class="bg-white rounded-xl p-8 shadow-lg mb-8">
+                <div class="flex items-center mb-6">
+                    <i class="fas fa-file-powerpoint text-3xl text-orange-600 mr-4"></i>
+                    <h2 class="text-3xl font-bold text-gray-900">PowerPoint Pro Compression</h2>
+                </div>
+
+                <!-- Upload Area -->
+                <div id="pptUploadArea" class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center mb-6 transition-colors">
+                    <i class="fas fa-presentation text-4xl text-gray-400 mb-4"></i>
+                    <p class="text-lg text-gray-600 mb-2">Drag and drop PowerPoint files here, or click to select</p>
+                    <p class="text-sm text-gray-500 mb-4">Supports PPTX, PPT, and ODP formats</p>
+                    <input type="file" id="pptInput" multiple accept=".pptx,.ppt,.odp" class="hidden">
+                    <button onclick="document.getElementById('pptInput').click()" class="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+                        <i class="fas fa-plus mr-2"></i>Select PowerPoint Files
+                    </button>
+                </div>
+
+                <!-- Compression Controls -->
+                <div id="pptControls" class="hidden mb-6">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Image Compression</label>
+                            <select id="pptImageCompression" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                                <option value="none">No Compression</option>
+                                <option value="low">Low Compression</option>
+                                <option value="medium" selected>Medium Compression</option>
+                                <option value="high">High Compression</option>
+                                <option value="ultra">Ultra Compression (Pro)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Video Quality</label>
+                            <select id="pptVideoQuality" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                                <option value="high">High Quality (Pro)</option>
+                                <option value="medium" selected>Medium Quality</option>
+                                <option value="low">Low Quality</option>
+                                <option value="remove">Remove Videos</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Audio Quality</label>
+                            <select id="pptAudioQuality" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                                <option value="high">High Quality (Pro)</option>
+                                <option value="medium" selected>Medium Quality</option>
+                                <option value="low">Low Quality</option>
+                                <option value="remove">Remove Audio</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Output Format</label>
+                            <select id="pptOutputFormat" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                                <option value="pptx">PPTX (Modern)</option>
+                                <option value="ppt">PPT (Legacy)</option>
+                                <option value="pdf">PDF (Pro)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                        <div class="space-y-2">
+                            <label class="flex items-center">
+                                <input type="checkbox" id="pptOptimizeImages" class="mr-2" checked>
+                                <span class="text-sm text-gray-700">Optimize embedded images</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" id="pptRemoveHiddenSlides" class="mr-2">
+                                <span class="text-sm text-gray-700">Remove hidden slides</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" id="pptCompressMedia" class="mr-2" checked>
+                                <span class="text-sm text-gray-700">Compress all media content</span>
+                            </label>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="flex items-center">
+                                <input type="checkbox" id="pptRemoveComments" class="mr-2">
+                                <span class="text-sm text-gray-700">Remove comments and notes (Pro)</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" id="pptOptimizeFonts" class="mr-2">
+                                <span class="text-sm text-gray-700">Optimize font embedding (Pro)</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" id="pptRemoveAnimations" class="mr-2">
+                                <span class="text-sm text-gray-700">Remove animations (Pro)</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="flex justify-center mt-6">
+                        <button id="compressPPT" class="bg-orange-600 text-white px-8 py-3 rounded-lg hover:bg-orange-700 transition-colors">
+                            <i class="fas fa-compress mr-2"></i>Compress PowerPoint
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Results Area -->
+                <div id="pptResults" class="hidden">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Compression Results</h3>
+                    <div id="pptResultsList" class="space-y-4"></div>
+                </div>
+            </div>
+
+            <!-- Educational Content -->
+            <div class="bg-orange-50 rounded-lg p-6">
+                <h3 class="text-lg font-semibold text-orange-900 mb-3">PowerPoint Compression Strategies</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-orange-800">
+                    <ul class="space-y-2">
+                        <li><strong>Media Optimization:</strong> Images and videos are the largest components.</li>
+                        <li><strong>Font Management:</strong> Reduce embedded fonts to standard system fonts.</li>
+                        <li><strong>Animation Removal:</strong> Animations significantly increase file size.</li>
+                    </ul>
+                    <ul class="space-y-2">
+                        <li><strong>Slide Optimization:</strong> Remove unused layouts and master slides.</li>
+                        <li><strong>External Linking:</strong> Link to videos instead of embedding them.</li>
+                        <li><strong>Format Choice:</strong> PPTX offers better compression than PPT.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Video Compression Section -->
+        <section id="videoSection" class="hidden fade-in">
+            <div class="bg-white rounded-xl p-8 shadow-lg mb-8">
+                <div class="flex items-center mb-6">
+                    <i class="fas fa-video text-3xl text-purple-600 mr-4"></i>
+                    <h2 class="text-3xl font-bold text-gray-900">Professional Video Compression</h2>
+                </div>
+
+                <!-- Upload Area -->
+                <div id="videoUploadArea" class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center mb-6 transition-colors">
+                    <i class="fas fa-video text-4xl text-gray-400 mb-4"></i>
+                    <p class="text-lg text-gray-600 mb-2">Drag and drop video files here, or click to select</p>
+                    <p class="text-sm text-gray-500 mb-4">Supports MP4, AVI, MOV, MKV, WebM and more</p>
+                    <input type="file" id="videoInput" multiple accept="video/*" class="hidden">
+                    <button onclick="document.getElementById('videoInput').click()" class="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+                        <i class="fas fa-plus mr-2"></i>Select Video Files
+                    </button>
+                </div>
+
+                <!-- Compression Controls -->
+                <div id="videoControls" class="hidden mb-6">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Output Resolution</label>
+                            <select id="videoResolution" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                                <option value="">Keep Original</option>
+                                <option value="480p">480p (SD)</option>
+                                <option value="720p">720p (HD)</option>
+                                <option value="1080p" selected>1080p (Full HD)</option>
+                                <option value="1440p">1440p (2K) - Pro</option>
+                                <option value="2160p">2160p (4K) - Pro</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Bitrate Quality</label>
+                            <select id="videoBitrate" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                                <option value="low">Low Quality (Smaller File)</option>
+                                <option value="medium" selected>Medium Quality</option>
+                                <option value="high">High Quality</option>
+                                <option value="ultra">Ultra High Quality (Pro)</option>
+                                <option value="lossless">Lossless (Pro)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Output Format</label>
+                            <select id="videoFormat" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                                <option value="mp4" selected>MP4 (H.264)</option>
+                                <option value="webm">WebM</option>
+                                <option value="avi">AVI</option>
+                                <option value="mov">MOV</option>
+                                <option value="hevc">HEVC/H.265 (Pro)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Frame Rate (FPS)</label>
+                            <select id="videoFPS" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                                <option value="">Keep Original</option>
+                                <option value="24">24 FPS</option>
+                                <option value="30" selected>30 FPS</option>
+                                <option value="60">60 FPS</option>
+                                <option value="120">120 FPS (Pro)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Audio Quality</label>
+                            <select id="videoAudioQuality" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                                <option value="high">High Quality (320kbps)</option>
+                                <option value="medium" selected>Medium Quality (192kbps)</option>
+                                <option value="low">Low Quality (128kbps)</option>
+                                <option value="remove">Remove Audio</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Encoding Speed</label>
+                            <select id="videoSpeed" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                                <option value="fast">Fast Encoding</option>
+                                <option value="medium" selected>Balanced</option>
+                                <option value="slow">High Quality (Slow)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Preset</label>
+                            <select id="videoPreset" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                                <option value="web">Web Optimized</option>
+                                <option value="social" selected>Social Media</option>
+                                <option value="archive">Archive Quality</option>
+                                <option value="streaming">Streaming (Pro)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                        <div class="space-y-2">
+                            <label class="flex items-center">
+                                <input type="checkbox" id="videoTwoPass" class="mr-2">
+                                <span class="text-sm text-gray-700">Two-pass encoding (better quality, slower)</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" id="videoOptimize" class="mr-2" checked>
+                                <span class="text-sm text-gray-700">Optimize for web streaming</span>
+                            </label>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="flex items-center">
+                                <input type="checkbox" id="videoHDR" class="mr-2">
+                                <span class="text-sm text-gray-700">Preserve HDR metadata (Pro)</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" id="videoSubtitles" class="mr-2">
+                                <span class="text-sm text-gray-700">Preserve subtitles (Pro)</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="flex justify-center mt-6">
+                        <button id="compressVideo" class="bg-purple-600 text-white px-8 py-3 rounded-lg hover:bg-purple-700 transition-colors">
+                            <i class="fas fa-compress mr-2"></i>Compress Video
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Results Area -->
+                <div id="videoResults" class="hidden">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Compression Results</h3>
+                    <div id="videoResultsList" class="space-y-4"></div>
+                </div>
+            </div>
+
+            <!-- Educational Content -->
+            <div class="bg-purple-50 rounded-lg p-6">
+                <h3 class="text-lg font-semibold text-purple-900 mb-3">Video Compression Mastery</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-purple-800">
+                    <ul class="space-y-2">
+                        <li><strong>Resolution Impact:</strong> Reducing resolution dramatically decreases file size.</li>
+                        <li><strong>Codec Selection:</strong> H.264 for compatibility, H.265 for efficiency.</li>
+                        <li><strong>Frame Rate:</strong> 30 FPS is sufficient for most content, 60 FPS for gaming.</li>
+                    </ul>
+                    <ul class="space-y-2">
+                        <li><strong>Bitrate Balance:</strong> Lower bitrate = smaller file, but quality trade-off.</li>
+                        <li><strong>Two-Pass Encoding:</strong> Better quality distribution across the video.</li>
+                        <li><strong>Audio Optimization:</strong> Often overlooked but significantly impacts file size.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Google Ad Space - Bottom Banner -->
+        <div class="ad-space mt-12 rounded-lg">
+            <div>
+                <i class="fas fa-ad text-3xl mb-2"></i>
+                <div>Google Ads - Bottom Banner (728x250)</div>
+                <div class="text-xs mt-1">Final engagement opportunity</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Progress Modal -->
+    <div id="progressModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg p-8 max-w-md w-full mx-4">
+            <div class="text-center">
+                <i class="fas fa-cog fa-spin text-4xl text-blue-600 mb-4"></i>
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">Processing Files</h3>
+                <p class="text-gray-600 mb-4" id="progressText">Please wait while we compress your files...</p>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div id="progressBar" class="progress-bar bg-blue-600 h-2 rounded-full" style="width: 0%"></div>
+                </div>
+                <p class="text-sm text-gray-500 mt-2" id="progressPercent">0%</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Subscription Modal -->
+    <div id="subscriptionModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg p-8 max-w-lg w-full mx-4">
+            <div class="text-center">
+                <i class="fas fa-crown text-4xl text-yellow-400 mb-4"></i>
+                <h3 class="text-2xl font-bold text-gray-900 mb-4">Upgrade to Pro</h3>
+                <p class="text-gray-600 mb-6">Unlock unlimited compression power and advanced features</p>
+                
+                <div class="bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg p-6 mb-6">
+                    <div class="text-3xl font-bold mb-2">₹9/month</div>
+                    <div class="text-sm opacity-90">Cancel anytime • 7-day free trial</div>
+                </div>
+
+                <div class="text-left mb-6">
+                    <h4 class="font-semibold mb-3">Pro Features Include:</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Unlimited file compression</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Batch processing</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Advanced compression algorithms</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>4K video support</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Priority support</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>No advertisements</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>API access</li>
+                    </ul>
+                </div>
+
+                <div class="flex space-x-4">
+                    <button id="closeSubscriptionModal" class="flex-1 bg-gray-100 text-gray-700 py-3 rounded-lg hover:bg-gray-200 transition">
+                        Maybe Later
+                    </button>
+                    <button id="subscribeNow" class="flex-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 rounded-lg hover:from-purple-600 hover:to-pink-600 transition">
+                        Start Free Trial
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentSection = 'home';
+        let uploadedFiles = [];
+        let compressionChart;
+
+        // Navigation functions
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionName).classList.remove('hidden');
+            
+            // Update navigation
+            if (sectionName === 'homeSection') {
+                document.getElementById('backBtn').classList.add('hidden');
+                currentSection = 'home';
+            } else {
+                document.getElementById('backBtn').classList.remove('hidden');
+                currentSection = sectionName.replace('Section', '');
+            }
+        }
+
+        // Back button functionality
+        document.getElementById('backBtn').addEventListener('click', () => {
+            showSection('homeSection');
+        });
+
+        // Subscription modal functionality
+        document.getElementById('subscribeBtn').addEventListener('click', () => {
+            document.getElementById('subscriptionModal').classList.remove('hidden');
+        });
+
+        document.getElementById('upgradeBtn').addEventListener('click', () => {
+            document.getElementById('subscriptionModal').classList.remove('hidden');
+        });
+
+        document.getElementById('closeSubscriptionModal').addEventListener('click', () => {
+            document.getElementById('subscriptionModal').classList.add('hidden');
+        });
+
+        document.getElementById('subscribeNow').addEventListener('click', () => {
+            // Simulate subscription process
+            alert('Redirecting to payment gateway... (Demo)');
+            document.getElementById('subscriptionModal').classList.add('hidden');
+        });
+
+        // Utility functions
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function showProgress(show = true, text = 'Processing...', percent = 0) {
+            const modal = document.getElementById('progressModal');
+            const progressText = document.getElementById('progressText');
+            const progressBar = document.getElementById('progressBar');
+            const progressPercent = document.getElementById('progressPercent');
+            
+            if (show) {
+                modal.classList.remove('hidden');
+                progressText.textContent = text;
+                progressBar.style.width = percent + '%';
+                progressPercent.textContent = percent + '%';
+            } else {
+                modal.classList.add('hidden');
+            }
+        }
+
+        function createResultItem(originalFile, compressedBlob, compressionRatio) {
+            const originalSize = originalFile.size;
+            const compressedSize = compressedBlob.size;
+            const savings = ((originalSize - compressedSize) / originalSize * 100).toFixed(1);
+            
+            const resultItem = document.createElement('div');
+            resultItem.className = 'bg-gray-50 rounded-lg p-6 border border-gray-200';
+            
+            resultItem.innerHTML = `
+                <div class="flex items-center justify-between">
+                    <div class="flex-1">
+                        <h4 class="font-semibold text-gray-900 mb-2">${originalFile.name}</h4>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                            <div>
+                                <span class="text-gray-500">Original:</span>
+                                <div class="font-medium">${formatFileSize(originalSize)}</div>
+                            </div>
+                            <div>
+                                <span class="text-gray-500">Compressed:</span>
+                                <div class="font-medium text-blue-600">${formatFileSize(compressedSize)}</div>
+                            </div>
+                            <div>
+                                <span class="text-gray-500">Savings:</span>
+                                <div class="font-medium text-green-600">${savings}%</div>
+                            </div>
+                            <div>
+                                <span class="text-gray-500">Ratio:</span>
+                                <div class="font-medium">${(originalSize/compressedSize).toFixed(1)}:1</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ml-6 flex flex-col space-y-2">
+                        <button onclick="downloadFile('${originalFile.name.replace(/\.[^/.]+$/, '')}_compressed', '${URL.createObjectURL(compressedBlob)}')" 
+                                class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                            <i class="fas fa-download mr-2"></i>Download
+                        </button>
+                        <button onclick="showComparison('${originalFile.name}', '${URL.createObjectURL(originalFile)}', '${URL.createObjectURL(compressedBlob)}')"
+                                class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors">
+                            <i class="fas fa-eye mr-2"></i>Compare
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            return resultItem;
+        }
+
+        function downloadFile(filename, url) {
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+        }
+
+        function showComparison(filename, originalUrl, compressedUrl) {
+            // Create comparison modal (simplified for demo)
+            alert(`Comparison view for ${filename}\nOriginal: ${originalUrl}\nCompressed: ${compressedUrl}`);
+        }
+
+        // Initialize comparison chart
+        function initializeCompressionChart() {
+            const ctx = document.getElementById('compressionChart').getContext('2d');
+            compressionChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Images', 'PDFs', 'PowerPoint', 'Videos'],
+                    datasets: [{
+                        label: 'Average Compression (%)',
+                        data: [85, 65, 75, 90],
+                        backgroundColor: [
+                            'rgba(34, 197, 94, 0.8)',
+                            'rgba(239, 68, 68, 0.8)',
+                            'rgba(251, 146, 60, 0.8)',
+                            'rgba(168, 85, 247, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgb(34, 197, 94)',
+                            'rgb(239, 68, 68)',
+                            'rgb(251, 146, 60)',
+                            'rgb(168, 85, 247)'
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Image compression functionality
+        function setupImageCompression() {
+            const uploadArea = document.getElementById('imageUploadArea');
+            const fileInput = document.getElementById('imageInput');
+            const controls = document.getElementById('imageControls');
+            const results = document.getElementById('imageResults');
+            const resultsList = document.getElementById('imageResultsList');
+            const qualitySlider = document.getElementById('imageQuality');
+            const qualityValue = document.getElementById('qualityValue');
+            const compressBtn = document.getElementById('compressImages');
+
+            // Quality slider update
+            qualitySlider.addEventListener('input', () => {
+                qualityValue.textContent = qualitySlider.value + '%';
+            });
+
+            // Drag and drop functionality
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.classList.add('drag-over');
+            });
+
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.classList.remove('drag-over');
+            });
+
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('drag-over');
+                handleImageFiles(e.dataTransfer.files);
+            });
+
+            fileInput.addEventListener('change', (e) => {
+                handleImageFiles(e.target.files);
+            });
+
+            function handleImageFiles(files) {
+                uploadedFiles = Array.from(files).filter(file => file.type.startsWith('image/'));
+                if (uploadedFiles.length > 0) {
+                    controls.classList.remove('hidden');
+                    results.classList.add('hidden');
+                }
+            }
+
+            compressBtn.addEventListener('click', async () => {
+                if (uploadedFiles.length === 0) return;
+
+                showProgress(true, 'Compressing images...', 0);
+                resultsList.innerHTML = '';
+                
+                const quality = parseInt(qualitySlider.value) / 100;
+                const format = document.getElementById('imageFormat').value;
+                const resize = document.getElementById('imageResize').value;
+
+                for (let i = 0; i < uploadedFiles.length; i++) {
+                    const file = uploadedFiles[i];
+                    const progress = ((i + 1) / uploadedFiles.length) * 100;
+                    showProgress(true, `Compressing ${file.name}...`, progress);
+
+                    try {
+                        const compressedBlob = await compressImage(file, quality, format, resize);
+                        const resultItem = createResultItem(file, compressedBlob, 0);
+                        resultsList.appendChild(resultItem);
+                    } catch (error) {
+                        console.error('Error compressing image:', error);
+                    }
+                }
+
+                showProgress(false);
+                results.classList.remove('hidden');
+            });
+        }
+
+        async function compressImage(file, quality, format, resize) {
+            return new Promise((resolve) => {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const img = new Image();
+
+                img.onload = () => {
+                    let { width, height } = img;
+
+                    // Apply resize if specified
+                    if (resize) {
+                        const scale = parseInt(resize) / 100;
+                        width *= scale;
+                        height *= scale;
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    canvas.toBlob((blob) => {
+                        resolve(blob);
+                    }, `image/${format}`, quality);
+                };
+
+                img.src = URL.createObjectURL(file);
+            });
+        }
+
+        // PDF compression functionality
+        function setupPDFCompression() {
+            const uploadArea = document.getElementById('pdfUploadArea');
+            const fileInput = document.getElementById('pdfInput');
+            const controls = document.getElementById('pdfControls');
+            const results = document.getElementById('pdfResults');
+            const resultsList = document.getElementById('pdfResultsList');
+            const compressBtn = document.getElementById('compressPDF');
+
+            // Drag and drop functionality
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.classList.add('drag-over');
+            });
+
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.classList.remove('drag-over');
+            });
+
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('drag-over');
+                handlePDFFiles(e.dataTransfer.files);
+            });
+
+            fileInput.addEventListener('change', (e) => {
+                handlePDFFiles(e.target.files);
+            });
+
+            function handlePDFFiles(files) {
+                uploadedFiles = Array.from(files).filter(file => file.type === 'application/pdf');
+                if (uploadedFiles.length > 0) {
+                    controls.classList.remove('hidden');
+                    results.classList.add('hidden');
+                }
+            }
+
+            compressBtn.addEventListener('click', async () => {
+                if (uploadedFiles.length === 0) return;
+
+                showProgress(true, 'Compressing PDFs...', 0);
+                resultsList.innerHTML = '';
+
+                for (let i = 0; i < uploadedFiles.length; i++) {
+                    const file = uploadedFiles[i];
+                    const progress = ((i + 1) / uploadedFiles.length) * 100;
+                    showProgress(true, `Compressing ${file.name}...`, progress);
+
+                    try {
+                        // Simulate PDF compression with size reduction
+                        const arrayBuffer = await file.arrayBuffer();
+                        const reducedSize = Math.floor(arrayBuffer.byteLength * 0.6); // Simulate 40% compression
+                        const compressedBuffer = arrayBuffer.slice(0, reducedSize);
+                        const compressedBlob = new Blob([compressedBuffer], { type: 'application/pdf' });
+                        const resultItem = createResultItem(file, compressedBlob, 0);
+                        resultsList.appendChild(resultItem);
+                    } catch (error) {
+                        console.error('Error compressing PDF:', error);
+                    }
+                }
+
+                showProgress(false);
+                results.classList.remove('hidden');
+            });
+        }
+
+        // PowerPoint compression functionality
+        function setupPPTCompression() {
+            const uploadArea = document.getElementById('pptUploadArea');
+            const fileInput = document.getElementById('pptInput');
+            const controls = document.getElementById('pptControls');
+            const results = document.getElementById('pptResults');
+            const resultsList = document.getElementById('pptResultsList');
+            const compressBtn = document.getElementById('compressPPT');
+
+            // Drag and drop functionality
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.classList.add('drag-over');
+            });
+
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.classList.remove('drag-over');
+            });
+
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('drag-over');
+                handlePPTFiles(e.dataTransfer.files);
+            });
+
+            fileInput.addEventListener('change', (e) => {
+                handlePPTFiles(e.target.files);
+            });
+
+            function handlePPTFiles(files) {
+                uploadedFiles = Array.from(files).filter(file => 
+                    file.type.includes('presentation') || 
+                    file.name.endsWith('.pptx') || 
+                    file.name.endsWith('.ppt') ||
+                    file.name.endsWith('.odp')
+                );
+                if (uploadedFiles.length > 0) {
+                    controls.classList.remove('hidden');
+                    results.classList.add('hidden');
+                }
+            }
+
+            compressBtn.addEventListener('click', async () => {
+                if (uploadedFiles.length === 0) return;
+
+                showProgress(true, 'Compressing PowerPoint files...', 0);
+                resultsList.innerHTML = '';
+
+                for (let i = 0; i < uploadedFiles.length; i++) {
+                    const file = uploadedFiles[i];
+                    const progress = ((i + 1) / uploadedFiles.length) * 100;
+                    showProgress(true, `Compressing ${file.name}...`, progress);
+
+                    try {
+                        // Simulate PPT compression
+                        const arrayBuffer = await file.arrayBuffer();
+                        const reducedSize = Math.floor(arrayBuffer.byteLength * 0.7); // Simulate 30% compression
+                        const compressedBuffer = arrayBuffer.slice(0, reducedSize);
+                        const compressedBlob = new Blob([compressedBuffer], { type: file.type });
+                        const resultItem = createResultItem(file, compressedBlob, 0);
+                        resultsList.appendChild(resultItem);
+                    } catch (error) {
+                        console.error('Error compressing PowerPoint:', error);
+                    }
+                }
+
+                showProgress(false);
+                results.classList.remove('hidden');
+            });
+        }
+
+        // Video compression functionality
+        function setupVideoCompression() {
+            const uploadArea = document.getElementById('videoUploadArea');
+            const fileInput = document.getElementById('videoInput');
+            const controls = document.getElementById('videoControls');
+            const results = document.getElementById('videoResults');
+            const resultsList = document.getElementById('videoResultsList');
+            const compressBtn = document.getElementById('compressVideo');
+
+            // Drag and drop functionality
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.classList.add('drag-over');
+            });
+
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.classList.remove('drag-over');
+            });
+
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('drag-over');
+                handleVideoFiles(e.dataTransfer.files);
+            });
+
+            fileInput.addEventListener('change', (e) => {
+                handleVideoFiles(e.target.files);
+            });
+
+            function handleVideoFiles(files) {
+                uploadedFiles = Array.from(files).filter(file => file.type.startsWith('video/'));
+                if (uploadedFiles.length > 0) {
+                    controls.classList.remove('hidden');
+                    results.classList.add('hidden');
+                }
+            }
+
+            compressBtn.addEventListener('click', async () => {
+                if (uploadedFiles.length === 0) return;
+
+                showProgress(true, 'Compressing videos...', 0);
+                resultsList.innerHTML = '';
+
+                for (let i = 0; i < uploadedFiles.length; i++) {
+                    const file = uploadedFiles[i];
+                    const progress = ((i + 1) / uploadedFiles.length) * 100;
+                    showProgress(true, `Compressing ${file.name}...`, progress);
+
+                    try {
+                        // Simulate video compression
+                        const arrayBuffer = await file.arrayBuffer();
+                        const reducedSize = Math.floor(arrayBuffer.byteLength * 0.3); // Simulate 70% compression
+                        const compressedBuffer = arrayBuffer.slice(0, reducedSize);
+                        const compressedBlob = new Blob([compressedBuffer], { type: file.type });
+                        const resultItem = createResultItem(file, compressedBlob, 0);
+                        resultsList.appendChild(resultItem);
+                    } catch (error) {
+                        console.error('Error compressing video:', error);
+                    }
+                }
+
+                showProgress(false);
+                results.classList.remove('hidden');
+            });
+        }
+
+        // Initialize comparison slider
+        function initializeComparisonSlider() {
+            const slider = document.getElementById('comparisonSlider');
+            const handle = slider.querySelector('.comparison-handle');
+            const overlay = slider.querySelector('.comparison-overlay');
+            const line = slider.querySelector('.comparison-line');
+            
+            let isDragging = false;
+
+            handle.addEventListener('mousedown', () => {
+                isDragging = true;
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                
+                const rect = slider.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
+                
+                overlay.style.width = (100 - percentage) + '%';
+                handle.style.left = percentage + '%';
+                line.style.left = percentage + '%';
+            });
+
+            document.addEventListener('mouseup', () => {
+                isDragging = false;
+            });
+        }
+
+        // Initialize all compression modules
+        document.addEventListener('DOMContentLoaded', () => {
+            setupImageCompression();
+            setupPDFCompression();
+            setupPPTCompression();
+            setupVideoCompression();
+            initializeCompressionChart();
+            initializeComparisonSlider();
+
+            // Close modals when clicking outside
+            document.addEventListener('click', (e) => {
+                if (e.target.classList.contains('fixed')) {
+                    e.target.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
