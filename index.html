@@ -495,7 +495,7 @@
                     <ul class="space-y-2">
                         <li><strong>JPEG:</strong> Best for photos with many colors. Quality 80-90% is usually optimal for web.</li>
                         <li><strong>PNG:</strong> Best for images with transparency, logos, or graphics with few colors.</li>
-                        <li><strong>WebP:</strong> Modern format with superior compression, supported by most browsers.</li>
+                        <li><strong>WebP:</b> Modern format with superior compression, supported by most browsers.</li>
                     </ul>
                     <ul class="space-y-2">
                         <li><strong>Quality Priority:</strong> Maintains visual quality with moderate compression.</li>
@@ -677,27 +677,48 @@
             <div class="modal-content">
                 <h3 class="text-2xl font-bold text-gray-900 mb-4 text-center">Confirm Pro Subscription</h3>
                 <p class="text-gray-700 mb-6 text-center">You are about to subscribe to the Pro Plan for ₹9/month.</p>
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Card Number</label>
-                        <input type="text" placeholder="**** **** **** ****" class="w-full border border-gray-300 rounded-lg px-4 py-2" disabled>
+                
+                <div id="paymentSummary" class="text-center mb-6">
+                    <p class="text-xl font-semibold text-blue-600 mb-2">Pro Plan Benefits:</p>
+                    <ul class="text-sm text-gray-800 list-disc list-inside mx-auto max-w-xs">
+                        <li>Unlimited files</li>
+                        <li>Advanced compression</li>
+                        <li>No ads</li>
+                    </ul>
+                </div>
+
+                <div id="paymentDetailsSection" class="hidden"> <!-- Initially hidden -->
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Card Number</label>
+                            <input type="text" placeholder="**** **** **** ****" class="w-full border border-gray-300 rounded-lg px-4 py-2" disabled>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Expiry Date</label>
+                                <input type="text" placeholder="MM/YY" class="w-full border border-gray-300 rounded-lg px-4 py-2" disabled>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">CVC</label>
+                                <input type="text" placeholder="***" class="w-full border border-gray-300 rounded-lg px-4 py-2" disabled>
+                            </div>
+                        </div>
                     </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Expiry Date</label>
-                            <input type="text" placeholder="MM/YY" class="w-full border border-gray-300 rounded-lg px-4 py-2" disabled>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">CVC</label>
-                            <input type="text" placeholder="***" class="w-full border border-gray-300 rounded-lg px-4 py-2" disabled>
-                        </div>
+                    <div class="mt-8 flex justify-center space-x-4">
+                        <button id="confirmPaymentBtn" class="bg-green-600 text-white px-8 py-3 rounded-lg hover:bg-green-700 transition-colors">
+                            Confirm Payment (Simulated)
+                        </button>
+                        <button id="cancelPaymentBtnDetails" class="bg-gray-300 text-gray-800 px-8 py-3 rounded-lg hover:bg-gray-400 transition-colors">
+                            Cancel
+                        </button>
                     </div>
                 </div>
-                <div class="mt-8 flex justify-center space-x-4">
-                    <button id="confirmPaymentBtn" class="bg-green-600 text-white px-8 py-3 rounded-lg hover:bg-green-700 transition-colors">
-                        Confirm Payment (Simulated)
+                
+                <div id="initialPaymentActions" class="mt-8 flex justify-center space-x-4">
+                    <button id="proceedToPaymentDetailsBtn" class="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+                        Proceed to Payment
                     </button>
-                    <button id="cancelPaymentBtn" class="bg-gray-300 text-gray-800 px-8 py-3 rounded-lg hover:bg-gray-400 transition-colors">
+                    <button id="cancelPaymentBtnInitial" class="bg-gray-300 text-gray-800 px-8 py-3 rounded-lg hover:bg-gray-400 transition-colors">
                         Cancel
                     </button>
                 </div>
@@ -767,8 +788,12 @@
         const messageText = document.getElementById('messageText');
         const messageCloseBtn = document.getElementById('messageCloseBtn');
         const paymentModal = document.getElementById('paymentModal');
+        const paymentDetailsSection = document.getElementById('paymentDetailsSection'); // New: payment details section
+        const initialPaymentActions = document.getElementById('initialPaymentActions'); // New: initial buttons
+        const proceedToPaymentDetailsBtn = document.getElementById('proceedToPaymentDetailsBtn'); // New: Proceed button
         const confirmPaymentBtn = document.getElementById('confirmPaymentBtn');
-        const cancelPaymentBtn = document.getElementById('cancelPaymentBtn');
+        const cancelPaymentBtnDetails = document.getElementById('cancelPaymentBtnDetails'); // New: Cancel button in details view
+        const cancelPaymentBtnInitial = document.getElementById('cancelPaymentBtnInitial'); // New: Cancel button in initial view
 
         // --- AdSense and Pro User Logic ---
         function updateProStatusUI() {
@@ -1134,12 +1159,27 @@
         upgradeBtn.addEventListener('click', () => {
             if (!isProUser) {
                 paymentModal.classList.remove('hidden');
+                paymentDetailsSection.classList.add('hidden'); // Ensure details are hidden initially
+                initialPaymentActions.classList.remove('hidden'); // Ensure initial buttons are visible
             }
         });
 
-        cancelPaymentBtn.addEventListener('click', () => {
+        // Event listener for the new "Proceed to Payment" button
+        proceedToPaymentDetailsBtn.addEventListener('click', () => {
+            initialPaymentActions.classList.add('hidden');
+            paymentDetailsSection.classList.remove('hidden');
+        });
+
+
+        // Handle both cancel buttons
+        cancelPaymentBtnInitial.addEventListener('click', () => {
             paymentModal.classList.add('hidden');
         });
+
+        cancelPaymentBtnDetails.addEventListener('click', () => {
+            paymentModal.classList.add('hidden');
+        });
+
 
         confirmPaymentBtn.addEventListener('click', () => {
             showLoading('Processing payment...');
@@ -1222,5 +1262,6 @@
     </script>
 </body>
 </html>
+
 
 
