@@ -39,54 +39,63 @@
         .gradient-bg {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
-        .comparison-slider {
+        /* New slider specific styles */
+        .image-comparison-container {
             position: relative;
             width: 100%;
-            height: 300px;
+            padding-top: 66.66%; /* Maintain 3:2 aspect ratio (e.g., 400/600) */
             overflow: hidden;
             border-radius: 12px;
+            background-color: #f0f0f0; /* Fallback background */
         }
-        .comparison-image {
+        .image-comparison-container img {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
+            user-select: none; /* Prevent dragging the image itself */
         }
-        .comparison-overlay {
+        .image-comparison-container input[type="range"] {
+            -webkit-appearance: none; /* Remove default slider style */
+            appearance: none;
+            height: 8px; /* Thicker slider track */
+            background: rgba(255, 255, 255, 0.5); /* White, semi-transparent track */
+            border-radius: 5px;
+            outline: none;
+            cursor: ew-resize;
+            margin: 0;
             position: absolute;
-            top: 0;
-            right: 0;
-            width: 50%;
-            height: 100%;
-            overflow: hidden;
+            bottom: 10px; /* Position it above the bottom */
+            left: 0;
+            width: 100%;
+            padding: 0 10px; /* Padding for thumb movement */
+            box-sizing: border-box;
         }
-        .comparison-handle {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 40px;
-            height: 40px;
-            background: white;
+        .image-comparison-container input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 30px; /* Size of the thumb */
+            height: 30px; /* Size of the thumb */
+            background: #fff; /* White thumb */
+            border: 2px solid #3B82F6; /* Blue border for the thumb */
+            border-radius: 50%; /* Circular thumb */
+            cursor: ew-resize;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 10; /* Ensure thumb is above images */
+        }
+        .image-comparison-container input[type="range"]::-moz-range-thumb {
+            width: 30px;
+            height: 30px;
+            background: #fff;
+            border: 2px solid #3B82F6;
             border-radius: 50%;
             cursor: ew-resize;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-            z-index: 10;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
-        .comparison-line {
-            position: absolute;
-            top: 0;
-            left: 50%;
-            width: 2px;
-            height: 100%;
-            background: white;
-            transform: translateX(-50%);
-        }
+
         /* AdSense specific styling - ensures ads are clearly visible but not deceptive */
         .ad-space {
             background: #f8f9fa;
@@ -113,7 +122,6 @@
         @media print {
             .no-print { display: none !important; }
         }
-        /* Modal Styles - Removed as per last instruction (no payment modals) */
     </style>
 </head>
 <body class="bg-gradient-to-br from-blue-50 to-indigo-100">
@@ -252,28 +260,17 @@
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <div>
                         <h4 class="text-lg font-semibold mb-4">Interactive Before/After Comparison</h4>
-                        <div class="comparison-slider" id="comparisonSlider">
-                            <div class="comparison-image bg-gray-200 flex items-center justify-center">
-                                <div class="text-center">
-                                    <i class="fas fa-image text-4xl text-gray-400 mb-2"></i>
-                                    <p class="text-gray-500 font-medium">Original Image</p>
-                                    <p class="text-sm text-gray-400">Large file size</p>
-                                </div>
+                        <!-- New Image Comparison Slider -->
+                        <div class="relative w-full max-w-xl mx-auto image-comparison-container">
+                            <div class="absolute top-0 left-0 w-full h-full">
+                                <img id="originalImage" src="https://placehold.co/600x400/007bff/ffffff?text=Original" alt="Original Image" class="w-full h-full object-cover rounded-lg" />
                             </div>
-                            <div class="comparison-overlay">
-                                <div class="comparison-image bg-blue-100 flex items-center justify-center h-full">
-                                    <div class="text-center">
-                                        <i class="fas fa-compress-alt text-4xl text-blue-500 mb-2"></i>
-                                        <p class="text-blue-700 font-medium">Compressed Image</p>
-                                        <p class="text-sm text-blue-500">90% smaller size</p>
-                                    </div>
-                                </div>
+                            <div class="absolute top-0 left-0 w-full h-full overflow-hidden" id="sliderWrapper">
+                                <img id="compressedImage" src="https://placehold.co/600x400/28a745/ffffff?text=Compressed" alt="Compressed Image" class="w-full h-full object-cover rounded-lg" />
                             </div>
-                            <div class="comparison-line"></div>
-                            <div class="comparison-handle">
-                                <i class="fas fa-arrows-alt-h text-gray-600"></i>
-                            </div>
+                            <input type="range" min="0" max="100" value="50" id="slider">
                         </div>
+                        <p class="text-sm text-gray-500 text-center mt-4">Drag the slider to compare original vs. compressed image quality.</p>
                     </div>
                     <div>
                         <h4 class="text-lg font-semibold mb-4">Compression Statistics</h4>
@@ -719,7 +716,8 @@
         let compressionChart;
 
         // DOM Elements
-        const sections = ['homeSection', 'imageSection', 'pdfSection', 'pptSection', 'videoSection', 'privacyPolicySection', 'contactUsSection', 'termsOfServiceSection']; // Updated sections array
+        // Added the new section IDs to the 'sections' array
+        const sections = ['homeSection', 'imageSection', 'pdfSection', 'pptSection', 'videoSection', 'privacyPolicySection', 'contactUsSection', 'termsOfServiceSection'];
         const backBtn = document.getElementById('backBtn');
         
         // AdSense related elements - kept for displaying ads
@@ -853,7 +851,6 @@
                 return;
             }
 
-            // No free user limits anymore, all files can be processed.
             imageControls.classList.remove('hidden');
             imageResults.classList.add('hidden'); // Hide previous results
             imageResultsList.innerHTML = ''; // Clear previous results
@@ -929,13 +926,6 @@
                 console.log('No PDF files selected.');
                 return;
             }
-
-            // All PDF features (including 'extreme', 'high' quality, 'archive') are now enabled by default.
-            pdfCompressionLevel.querySelector('option[value="extreme"]').disabled = false;
-            pdfImageQuality.querySelector('option[value="high"]').disabled = false;
-            pdfOptimization.querySelector('option[value="archive"]').disabled = false;
-            pdfRemoveMetadata.disabled = false;
-            pdfLinearize.disabled = false;
 
             pdfControls.classList.remove('hidden');
             pdfResults.classList.add('hidden'); // Hide previous results
@@ -1018,58 +1008,19 @@
             }
         });
 
-        // --- Comparison Slider Logic ---
-        const comparisonSlider = document.getElementById('comparisonSlider');
-        const comparisonOverlay = comparisonSlider.querySelector('.comparison-overlay');
-        const comparisonHandle = comparisonSlider.querySelector('.comparison-handle');
-        const comparisonLine = comparisonSlider.querySelector('.comparison-line');
-
-        let isDragging = false;
-
-        comparisonHandle.addEventListener('mousedown', () => {
-            isDragging = true;
-        });
-        comparisonHandle.addEventListener('touchstart', (e) => {
-            isDragging = true;
-            e.preventDefault(); // Prevent scrolling
-        });
-
-        document.addEventListener('mousemove', (e) => {
-            if (!isDragging) return;
-            updateSlider(e.clientX);
-        });
-        document.addEventListener('touchmove', (e) => {
-            if (!isDragging || !e.touches[0]) return;
-            updateSlider(e.touches[0].clientX);
-            e.preventDefault(); // Prevent scrolling
-        });
-
-        document.addEventListener('mouseup', () => {
-            isDragging = false;
-        });
-        document.addEventListener('touchend', () => {
-            isDragging = false;
-        });
-
-        function updateSlider(clientX) {
-            const rect = comparisonSlider.getBoundingClientRect();
-            let x = clientX - rect.left; // X position relative to the element
-            
-            // Constrain x within the slider boundaries
-            x = Math.max(0, Math.min(x, rect.width));
-
-            const percentage = (x / rect.width) * 100;
-
-            comparisonOverlay.style.width = `${100 - percentage}%`;
-            comparisonHandle.style.left = `${percentage}%`;
-            comparisonLine.style.left = `${percentage}%`;
+        // --- Comparison Slider Logic (from user's snippet) ---
+        const slider = document.getElementById('slider');
+        const sliderWrapper = document.getElementById('sliderWrapper');
+        if (slider && sliderWrapper) { // Ensure elements exist before adding listener
+            slider.addEventListener('input', () => {
+                sliderWrapper.style.width = `${slider.value}%`;
+            });
         }
 
 
         // --- Initial Load ---
         document.addEventListener('DOMContentLoaded', () => {
             showSection('homeSection'); // Show home section on load
-            // All features are free, no Pro status to manage.
 
             // Initialize AdSense
             (adsbygoogle = window.adsbygoogle || []).push({});
@@ -1081,6 +1032,7 @@
     </script>
 </body>
 </html>
+
 
 
 
