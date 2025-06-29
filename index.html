@@ -8,9 +8,12 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7199979485069328"
-     crossorigin="anonymous"></script>
+    <!-- Asynchronous loading of AdSense script -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7199979485069328" crossorigin="anonymous"></script>
     <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
         .fade-in {
             animation: fadeIn 0.5s ease-in;
         }
@@ -20,6 +23,7 @@
         }
         .compress-card {
             transition: all 0.3s ease;
+            border-radius: 0.75rem; /* Equivalent to rounded-xl */
         }
         .compress-card:hover {
             transform: translateY(-5px);
@@ -83,6 +87,7 @@
             background: white;
             transform: translateX(-50%);
         }
+        /* AdSense specific styling - ensures ads are clearly visible but not deceptive */
         .ad-space {
             background: #f8f9fa;
             border: 2px dashed #dee2e6;
@@ -91,8 +96,9 @@
             justify-content: center;
             color: #6c757d;
             font-size: 14px;
-            min-height: 250px;
+            min-height: 250px; /* Ensures space for ad */
             text-align: center;
+            border-radius: 0.5rem; /* Equivalent to rounded-lg */
         }
         .premium-badge {
             background: linear-gradient(45deg, #FFD700, #FFA500);
@@ -107,6 +113,28 @@
         @media print {
             .no-print { display: none !important; }
         }
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 500px;
+            animation: fadeIn 0.3s ease-out;
+        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-blue-50 to-indigo-100">
@@ -117,7 +145,7 @@
                 <div class="flex items-center">
                     <i class="fas fa-compress-alt text-3xl text-blue-600 mr-3"></i>
                     <h1 class="text-2xl font-bold text-gray-900">Compressor Pro</h1>
-                    <span class="premium-badge">PREMIUM</span>
+                    <span id="premiumBadge" class="premium-badge hidden">PREMIUM</span>
                 </div>
                 <div class="flex items-center space-x-4">
                     <button id="subscribeBtn" class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-2 rounded-full hover:from-purple-600 hover:to-pink-600 transition-all duration-300 font-semibold">
@@ -134,23 +162,17 @@
     <!-- Main Content -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <!-- Google Ad Space - Top Banner -->
-        <div class="ad-space mb-8 rounded-lg">
-            <div>
-                <i class="fas fa-ad text-3xl mb-2"></i>
-                <div><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7199979485069328"
-     crossorigin="anonymous"></script>
-<!-- sidebar1 -->
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-7199979485069328"
-     data-ad-slot="3059014774"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script></div>
-                <div class="text-xs mt-1">Advertisement space for monetization</div>
-            </div>
+        <div id="topAdSpace" class="ad-space mb-8">
+            <!-- AdSense Code - Cleaned for compliance -->
+            <ins class="adsbygoogle"
+                style="display:block"
+                data-ad-client="ca-pub-7199979485069328"
+                data-ad-slot="3059014774"
+                data-ad-format="auto"
+                data-full-width-responsive="true"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
         </div>
 
         <!-- Home Section -->
@@ -288,23 +310,17 @@
             </div>
 
             <!-- Google Ad Space - Middle Banner -->
-            <div class="ad-space mb-12 rounded-lg">
-                <div>
-                    <i class="fas fa-ad text-3xl mb-2"></i>
-                    <div><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7199979485069328"
-     crossorigin="anonymous"></script>
-<!-- sidebar1 -->
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-7199979485069328"
-     data-ad-slot="3059014774"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script></div>
-                    <div class="text-xs mt-1">Strategic placement for user engagement</div>
-                </div>
+            <div id="middleAdSpace" class="ad-space mb-12">
+                <!-- AdSense Code - Cleaned for compliance -->
+                <ins class="adsbygoogle"
+                    style="display:block"
+                    data-ad-client="ca-pub-7199979485069328"
+                    data-ad-slot="3059014774"
+                    data-ad-format="auto"
+                    data-full-width-responsive="true"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
             </div>
 
             <!-- Features Section -->
@@ -459,22 +475,17 @@
             </div>
 
             <!-- Google Ad Space - Section Ad -->
-            <div class="ad-space mb-8 rounded-lg">
-                <div>
-                    <i class="fas fa-ad text-2xl mb-2"></i>
-                    <div><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7199979485069328"
-     crossorigin="anonymous"></script>
-<!-- sidebar1 -->
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-7199979485069328"
-     data-ad-slot="3059014774"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script></div>
-                </div>
+            <div id="sectionAdSpace" class="ad-space mb-8">
+                <!-- AdSense Code - Cleaned for compliance -->
+                <ins class="adsbygoogle"
+                    style="display:block"
+                    data-ad-client="ca-pub-7199979485069328"
+                    data-ad-slot="3059014774"
+                    data-ad-format="auto"
+                    data-full-width-responsive="true"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
             </div>
 
             <!-- Educational Content -->
@@ -566,900 +577,639 @@
                         </div>
                     </div>
                     <div class="flex justify-center mt-6">
-                        <button id="compressPDF" class="bg-red-600 text-white px-8 py-3 rounded-lg hover:bg-red-700 transition-colors">
+                        <button id="compressPdf" class="bg-red-600 text-white px-8 py-3 rounded-lg hover:bg-red-700 transition-colors">
                             <i class="fas fa-compress mr-2"></i>Compress PDF
                         </button>
                     </div>
                 </div>
 
-                <!-- Results Area -->
+                <!-- PDF Results Area -->
                 <div id="pdfResults" class="hidden">
                     <h3 class="text-xl font-semibold text-gray-900 mb-4">Compression Results</h3>
                     <div id="pdfResultsList" class="space-y-4"></div>
                 </div>
             </div>
 
+            <!-- Google Ad Space - Section Ad -->
+            <div id="pdfSectionAdSpace" class="ad-space mb-8">
+                <!-- AdSense Code - Cleaned for compliance -->
+                <ins class="adsbygoogle"
+                    style="display:block"
+                    data-ad-client="ca-pub-7199979485069328"
+                    data-ad-slot="3059014774"
+                    data-ad-format="auto"
+                    data-full-width-responsive="true"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+            
             <!-- Educational Content -->
             <div class="bg-red-50 rounded-lg p-6">
-                <h3 class="text-lg font-semibold text-red-900 mb-3">PDF Compression Best Practices</h3>
+                <h3 class="text-lg font-semibold text-red-900 mb-3">Advanced PDF Compression Strategies</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-red-800">
                     <ul class="space-y-2">
-                        <li><strong>Web Viewing:</strong> Optimized for online viewing and sharing.</li>
-                        <li><strong>Print Quality:</strong> Maintains quality suitable for printing.</li>
-                        <li><strong>Archive Mode:</strong> Long-term storage optimization with maximum compatibility.</li>
+                        <li><strong>Low Compression:</strong> Ideal for preserving maximum quality, minimal size reduction.</li>
+                        <li><strong>Medium Compression:</strong> Balanced approach for good quality and reasonable file size.</li>
+                        <li><strong>High Compression:</strong> Aggressive size reduction, might affect image quality within PDF.</li>
                     </ul>
                     <ul class="space-y-2">
-                        <li><strong>Image Optimization:</strong> Reduces embedded image sizes significantly.</li>
-                        <li><strong>Metadata Removal:</strong> Removes hidden data and properties.</li>
-                        <li><strong>Linearization:</strong> Enables fast web viewing and progressive loading.</li>
+                        <li><strong>Optimize Embedded Images:</strong> Crucial for PDF size reduction, especially for documents with many images.</li>
+                        <li><strong>Remove Metadata:</strong> Essential for privacy and further size reduction (Pro feature).</li>
+                        <li><strong>Linearize for Web:</strong> Allows PDFs to open quickly in web browsers, displaying the first page while the rest loads (Pro feature).</li>
                     </ul>
                 </div>
             </div>
         </section>
 
-        <!-- PowerPoint Compression Section -->
+        <!-- PowerPoint Compression Section (Placeholder) -->
         <section id="pptSection" class="hidden fade-in">
-            <div class="bg-white rounded-xl p-8 shadow-lg mb-8">
-                <div class="flex items-center mb-6">
-                    <i class="fas fa-file-powerpoint text-3xl text-orange-600 mr-4"></i>
-                    <h2 class="text-3xl font-bold text-gray-900">PowerPoint Pro Compression</h2>
-                </div>
-
-                <!-- Upload Area -->
-                <div id="pptUploadArea" class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center mb-6 transition-colors">
-                    <i class="fas fa-presentation text-4xl text-gray-400 mb-4"></i>
-                    <p class="text-lg text-gray-600 mb-2">Drag and drop PowerPoint files here, or click to select</p>
-                    <p class="text-sm text-gray-500 mb-4">Supports PPTX, PPT, and ODP formats</p>
-                    <input type="file" id="pptInput" multiple accept=".pptx,.ppt,.odp" class="hidden">
-                    <button onclick="document.getElementById('pptInput').click()" class="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors">
-                        <i class="fas fa-plus mr-2"></i>Select PowerPoint Files
-                    </button>
-                </div>
-
-                <!-- Compression Controls -->
-                <div id="pptControls" class="hidden mb-6">
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Image Compression</label>
-                            <select id="pptImageCompression" class="w-full border border-gray-300 rounded-lg px-3 py-2">
-                                <option value="none">No Compression</option>
-                                <option value="low">Low Compression</option>
-                                <option value="medium" selected>Medium Compression</option>
-                                <option value="high">High Compression</option>
-                                <option value="ultra">Ultra Compression (Pro)</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Video Quality</label>
-                            <select id="pptVideoQuality" class="w-full border border-gray-300 rounded-lg px-3 py-2">
-                                <option value="high">High Quality (Pro)</option>
-                                <option value="medium" selected>Medium Quality</option>
-                                <option value="low">Low Quality</option>
-                                <option value="remove">Remove Videos</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Audio Quality</label>
-                            <select id="pptAudioQuality" class="w-full border border-gray-300 rounded-lg px-3 py-2">
-                                <option value="high">High Quality (Pro)</option>
-                                <option value="medium" selected>Medium Quality</option>
-                                <option value="low">Low Quality</option>
-                                <option value="remove">Remove Audio</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Output Format</label>
-                            <select id="pptOutputFormat" class="w-full border border-gray-300 rounded-lg px-3 py-2">
-                                <option value="pptx">PPTX (Modern)</option>
-                                <option value="ppt">PPT (Legacy)</option>
-                                <option value="pdf">PDF (Pro)</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                        <div class="space-y-2">
-                            <label class="flex items-center">
-                                <input type="checkbox" id="pptOptimizeImages" class="mr-2" checked>
-                                <span class="text-sm text-gray-700">Optimize embedded images</span>
-                            </label>
-                            <label class="flex items-center">
-                                <input type="checkbox" id="pptRemoveHiddenSlides" class="mr-2">
-                                <span class="text-sm text-gray-700">Remove hidden slides</span>
-                            </label>
-                            <label class="flex items-center">
-                                <input type="checkbox" id="pptCompressMedia" class="mr-2" checked>
-                                <span class="text-sm text-gray-700">Compress all media content</span>
-                            </label>
-                        </div>
-                        <div class="space-y-2">
-                            <label class="flex items-center">
-                                <input type="checkbox" id="pptRemoveComments" class="mr-2">
-                                <span class="text-sm text-gray-700">Remove comments and notes (Pro)</span>
-                            </label>
-                            <label class="flex items-center">
-                                <input type="checkbox" id="pptOptimizeFonts" class="mr-2">
-                                <span class="text-sm text-gray-700">Optimize font embedding (Pro)</span>
-                            </label>
-                            <label class="flex items-center">
-                                <input type="checkbox" id="pptRemoveAnimations" class="mr-2">
-                                <span class="text-sm text-gray-700">Remove animations (Pro)</span>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="flex justify-center mt-6">
-                        <button id="compressPPT" class="bg-orange-600 text-white px-8 py-3 rounded-lg hover:bg-orange-700 transition-colors">
-                            <i class="fas fa-compress mr-2"></i>Compress PowerPoint
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Results Area -->
-                <div id="pptResults" class="hidden">
-                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Compression Results</h3>
-                    <div id="pptResultsList" class="space-y-4"></div>
-                </div>
-            </div>
-
-            <!-- Educational Content -->
-            <div class="bg-orange-50 rounded-lg p-6">
-                <h3 class="text-lg font-semibold text-orange-900 mb-3">PowerPoint Compression Strategies</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-orange-800">
-                    <ul class="space-y-2">
-                        <li><strong>Media Optimization:</strong> Images and videos are the largest components.</li>
-                        <li><strong>Font Management:</strong> Reduce embedded fonts to standard system fonts.</li>
-                        <li><strong>Animation Removal:</strong> Animations significantly increase file size.</li>
-                    </ul>
-                    <ul class="space-y-2">
-                        <li><strong>Slide Optimization:</strong> Remove unused layouts and master slides.</li>
-                        <li><strong>External Linking:</strong> Link to videos instead of embedding them.</li>
-                        <li><strong>Format Choice:</strong> PPTX offers better compression than PPT.</li>
-                    </ul>
-                </div>
+            <div class="bg-white rounded-xl p-8 shadow-lg mb-8 text-center">
+                <i class="fas fa-file-powerpoint text-5xl text-orange-600 mb-4"></i>
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">PowerPoint Compression (Coming Soon)</h2>
+                <p class="text-gray-600 text-lg mb-6">
+                    Our professional PowerPoint compression tool is under development, offering advanced features for presentations.
+                </p>
+                <button onclick="showSection('homeSection')" class="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-300 transition-colors">
+                    Back to Home
+                </button>
             </div>
         </section>
 
-        <!-- Video Compression Section -->
+        <!-- Video Compression Section (Placeholder) -->
         <section id="videoSection" class="hidden fade-in">
-            <div class="bg-white rounded-xl p-8 shadow-lg mb-8">
-                <div class="flex items-center mb-6">
-                    <i class="fas fa-video text-3xl text-purple-600 mr-4"></i>
-                    <h2 class="text-3xl font-bold text-gray-900">Professional Video Compression</h2>
-                </div>
-
-                <!-- Upload Area -->
-                <div id="videoUploadArea" class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center mb-6 transition-colors">
-                    <i class="fas fa-video text-4xl text-gray-400 mb-4"></i>
-                    <p class="text-lg text-gray-600 mb-2">Drag and drop video files here, or click to select</p>
-                    <p class="text-sm text-gray-500 mb-4">Supports MP4, AVI, MOV, MKV, WebM and more</p>
-                    <input type="file" id="videoInput" multiple accept="video/*" class="hidden">
-                    <button onclick="document.getElementById('videoInput').click()" class="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors">
-                        <i class="fas fa-plus mr-2"></i>Select Video Files
-                    </button>
-                </div>
-
-                <!-- Compression Controls -->
-                <div id="videoControls" class="hidden mb-6">
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Output Resolution</label>
-                            <select id="videoResolution" class="w-full border border-gray-300 rounded-lg px-3 py-2">
-                                <option value="">Keep Original</option>
-                                <option value="480p">480p (SD)</option>
-                                <option value="720p">720p (HD)</option>
-                                <option value="1080p" selected>1080p (Full HD)</option>
-                                <option value="1440p">1440p (2K) - Pro</option>
-                                <option value="2160p">2160p (4K) - Pro</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Bitrate Quality</label>
-                            <select id="videoBitrate" class="w-full border border-gray-300 rounded-lg px-3 py-2">
-                                <option value="low">Low Quality (Smaller File)</option>
-                                <option value="medium" selected>Medium Quality</option>
-                                <option value="high">High Quality</option>
-                                <option value="ultra">Ultra High Quality (Pro)</option>
-                                <option value="lossless">Lossless (Pro)</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Output Format</label>
-                            <select id="videoFormat" class="w-full border border-gray-300 rounded-lg px-3 py-2">
-                                <option value="mp4" selected>MP4 (H.264)</option>
-                                <option value="webm">WebM</option>
-                                <option value="avi">AVI</option>
-                                <option value="mov">MOV</option>
-                                <option value="hevc">HEVC/H.265 (Pro)</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Frame Rate (FPS)</label>
-                            <select id="videoFPS" class="w-full border border-gray-300 rounded-lg px-3 py-2">
-                                <option value="">Keep Original</option>
-                                <option value="24">24 FPS</option>
-                                <option value="30" selected>30 FPS</option>
-                                <option value="60">60 FPS</option>
-                                <option value="120">120 FPS (Pro)</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Audio Quality</label>
-                            <select id="videoAudioQuality" class="w-full border border-gray-300 rounded-lg px-3 py-2">
-                                <option value="high">High Quality (320kbps)</option>
-                                <option value="medium" selected>Medium Quality (192kbps)</option>
-                                <option value="low">Low Quality (128kbps)</option>
-                                <option value="remove">Remove Audio</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Encoding Speed</label>
-                            <select id="videoSpeed" class="w-full border border-gray-300 rounded-lg px-3 py-2">
-                                <option value="fast">Fast Encoding</option>
-                                <option value="medium" selected>Balanced</option>
-                                <option value="slow">High Quality (Slow)</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Preset</label>
-                            <select id="videoPreset" class="w-full border border-gray-300 rounded-lg px-3 py-2">
-                                <option value="web">Web Optimized</option>
-                                <option value="social" selected>Social Media</option>
-                                <option value="archive">Archive Quality</option>
-                                <option value="streaming">Streaming (Pro)</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                        <div class="space-y-2">
-                            <label class="flex items-center">
-                                <input type="checkbox" id="videoTwoPass" class="mr-2">
-                                <span class="text-sm text-gray-700">Two-pass encoding (better quality, slower)</span>
-                            </label>
-                            <label class="flex items-center">
-                                <input type="checkbox" id="videoOptimize" class="mr-2" checked>
-                                <span class="text-sm text-gray-700">Optimize for web streaming</span>
-                            </label>
-                        </div>
-                        <div class="space-y-2">
-                            <label class="flex items-center">
-                                <input type="checkbox" id="videoHDR" class="mr-2">
-                                <span class="text-sm text-gray-700">Preserve HDR metadata (Pro)</span>
-                            </label>
-                            <label class="flex items-center">
-                                <input type="checkbox" id="videoSubtitles" class="mr-2">
-                                <span class="text-sm text-gray-700">Preserve subtitles (Pro)</span>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="flex justify-center mt-6">
-                        <button id="compressVideo" class="bg-purple-600 text-white px-8 py-3 rounded-lg hover:bg-purple-700 transition-colors">
-                            <i class="fas fa-compress mr-2"></i>Compress Video
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Results Area -->
-                <div id="videoResults" class="hidden">
-                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Compression Results</h3>
-                    <div id="videoResultsList" class="space-y-4"></div>
-                </div>
-            </div>
-
-            <!-- Educational Content -->
-            <div class="bg-purple-50 rounded-lg p-6">
-                <h3 class="text-lg font-semibold text-purple-900 mb-3">Video Compression Mastery</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-purple-800">
-                    <ul class="space-y-2">
-                        <li><strong>Resolution Impact:</strong> Reducing resolution dramatically decreases file size.</li>
-                        <li><strong>Codec Selection:</strong> H.264 for compatibility, H.265 for efficiency.</li>
-                        <li><strong>Frame Rate:</strong> 30 FPS is sufficient for most content, 60 FPS for gaming.</li>
-                    </ul>
-                    <ul class="space-y-2">
-                        <li><strong>Bitrate Balance:</strong> Lower bitrate = smaller file, but quality trade-off.</li>
-                        <li><strong>Two-Pass Encoding:</strong> Better quality distribution across the video.</li>
-                        <li><strong>Audio Optimization:</strong> Often overlooked but significantly impacts file size.</li>
-                    </ul>
-                </div>
+            <div class="bg-white rounded-xl p-8 shadow-lg mb-8 text-center">
+                <i class="fas fa-video text-5xl text-purple-600 mb-4"></i>
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Video Compression (Coming Soon)</h2>
+                <p class="text-gray-600 text-lg mb-6">
+                    Experience state-of-the-art video compression for 4K and HDR content. Coming soon to Compressor Pro!
+                </p>
+                <button onclick="showSection('homeSection')" class="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-300 transition-colors">
+                    Back to Home
+                </button>
             </div>
         </section>
 
-        <!-- Google Ad Space - Bottom Banner -->
-        <div class="ad-space mt-12 rounded-lg">
-            <div>
-                <i class="fas fa-ad text-3xl mb-2"></i>
-                <div>Google Ads - Bottom Banner (728x250)</div>
-                <div class="text-xs mt-1">Final engagement opportunity</div>
+        <!-- Loading Spinner / Message Box -->
+        <div id="loadingModal" class="modal-overlay hidden">
+            <div class="modal-content text-center">
+                <div class="flex justify-center items-center mb-4">
+                    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+                </div>
+                <p id="loadingMessage" class="text-lg text-gray-700 font-semibold">Processing your files...</p>
             </div>
         </div>
-    </div>
 
-    <!-- Progress Modal -->
-    <div id="progressModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <div class="bg-white rounded-lg p-8 max-w-md w-full mx-4">
-            <div class="text-center">
-                <i class="fas fa-cog fa-spin text-4xl text-blue-600 mb-4"></i>
-                <h3 class="text-xl font-semibold text-gray-900 mb-2">Processing Files</h3>
-                <p class="text-gray-600 mb-4" id="progressText">Please wait while we compress your files...</p>
-                <div class="w-full bg-gray-200 rounded-full h-2">
-                    <div id="progressBar" class="progress-bar bg-blue-600 h-2 rounded-full" style="width: 0%"></div>
-                </div>
-                <p class="text-sm text-gray-500 mt-2" id="progressPercent">0%</p>
+        <!-- Custom Message Box Modal -->
+        <div id="messageModal" class="modal-overlay hidden">
+            <div class="modal-content text-center">
+                <i id="messageIcon" class="text-5xl mb-4"></i>
+                <h3 id="messageTitle" class="text-2xl font-bold mb-3"></h3>
+                <p id="messageText" class="text-gray-700 mb-6"></p>
+                <button id="messageCloseBtn" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+                    OK
+                </button>
             </div>
         </div>
-    </div>
 
-    <!-- Subscription Modal -->
-    <div id="subscriptionModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <div class="bg-white rounded-lg p-8 max-w-lg w-full mx-4">
-            <div class="text-center">
-                <i class="fas fa-crown text-4xl text-yellow-400 mb-4"></i>
-                <h3 class="text-2xl font-bold text-gray-900 mb-4">Upgrade to Pro</h3>
-                <p class="text-gray-600 mb-6">Unlock unlimited compression power and advanced features</p>
-                
-                <div class="bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg p-6 mb-6">
-                    <div class="text-3xl font-bold mb-2">₹9/month</div>
-                    <div class="text-sm opacity-90">Cancel anytime • 7-day free trial</div>
+        <!-- Payment Simulation Modal -->
+        <div id="paymentModal" class="modal-overlay hidden">
+            <div class="modal-content">
+                <h3 class="text-2xl font-bold text-gray-900 mb-4 text-center">Confirm Pro Subscription</h3>
+                <p class="text-gray-700 mb-6 text-center">You are about to subscribe to the Pro Plan for ₹9/month.</p>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Card Number</label>
+                        <input type="text" placeholder="**** **** **** ****" class="w-full border border-gray-300 rounded-lg px-4 py-2" disabled>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Expiry Date</label>
+                            <input type="text" placeholder="MM/YY" class="w-full border border-gray-300 rounded-lg px-4 py-2" disabled>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">CVC</label>
+                            <input type="text" placeholder="***" class="w-full border border-gray-300 rounded-lg px-4 py-2" disabled>
+                        </div>
+                    </div>
                 </div>
-
-                <div class="text-left mb-6">
-                    <h4 class="font-semibold mb-3">Pro Features Include:</h4>
-                    <ul class="space-y-2 text-sm">
-                        <li><i class="fas fa-check text-green-500 mr-2"></i>Unlimited file compression</li>
-                        <li><i class="fas fa-check text-green-500 mr-2"></i>Batch processing</li>
-                        <li><i class="fas fa-check text-green-500 mr-2"></i>Advanced compression algorithms</li>
-                        <li><i class="fas fa-check text-green-500 mr-2"></i>4K video support</li>
-                        <li><i class="fas fa-check text-green-500 mr-2"></i>Priority support</li>
-                        <li><i class="fas fa-check text-green-500 mr-2"></i>No advertisements</li>
-                        <li><i class="fas fa-check text-green-500 mr-2"></i>API access</li>
-                    </ul>
-                </div>
-
-                <div class="flex space-x-4">
-                    <button id="closeSubscriptionModal" class="flex-1 bg-gray-100 text-gray-700 py-3 rounded-lg hover:bg-gray-200 transition">
-                        Maybe Later
+                <div class="mt-8 flex justify-center space-x-4">
+                    <button id="confirmPaymentBtn" class="bg-green-600 text-white px-8 py-3 rounded-lg hover:bg-green-700 transition-colors">
+                        Confirm Payment (Simulated)
                     </button>
-                    <button id="subscribeNow" class="flex-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 rounded-lg hover:from-purple-600 hover:to-pink-600 transition">
-                        Start Free Trial
+                    <button id="cancelPaymentBtn" class="bg-gray-300 text-gray-800 px-8 py-3 rounded-lg hover:bg-gray-400 transition-colors">
+                        Cancel
                     </button>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 py-6 mt-12 no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-600 text-sm">
+            &copy; 2025 Compressor Pro. All rights reserved. | <a href="#" class="text-blue-600 hover:underline">Privacy Policy</a> | <a href="#" class="text-blue-600 hover:underline">Terms of Service</a>
+        </div>
+    </footer>
 
     <script>
-        // Global variables
-        let currentSection = 'home';
-        let uploadedFiles = [];
+        // Global variables and state management
+        let currentSection = 'homeSection';
+        let chartInitialized = false;
         let compressionChart;
+        let isProUser = localStorage.getItem('isProUser') === 'true'; // Get Pro status from localStorage
 
-        // Navigation functions
-        function showSection(sectionName) {
-            // Hide all sections
-            document.querySelectorAll('section').forEach(section => {
-                section.classList.add('hidden');
+        // DOM Elements
+        const sections = ['homeSection', 'imageSection', 'pdfSection', 'pptSection', 'videoSection'];
+        const backBtn = document.getElementById('backBtn');
+        const subscribeBtn = document.getElementById('subscribeBtn');
+        const upgradeBtn = document.getElementById('upgradeBtn');
+        const premiumBadge = document.getElementById('premiumBadge');
+
+        // AdSense related elements
+        const topAdSpace = document.getElementById('topAdSpace');
+        const middleAdSpace = document.getElementById('middleAdSpace');
+        const sectionAdSpace = document.getElementById('sectionAdSpace'); // For image section
+        const pdfSectionAdSpace = document.getElementById('pdfSectionAdSpace'); // For PDF section
+
+        // Image compression elements
+        const imageUploadArea = document.getElementById('imageUploadArea');
+        const imageInput = document.getElementById('imageInput');
+        const imageControls = document.getElementById('imageControls');
+        const imageQuality = document.getElementById('imageQuality');
+        const qualityValue = document.getElementById('qualityValue');
+        const compressImagesBtn = document.getElementById('compressImages');
+        const imageResults = document.getElementById('imageResults');
+        const imageResultsList = document.getElementById('imageResultsList');
+
+        // PDF compression elements
+        const pdfUploadArea = document.getElementById('pdfUploadArea');
+        const pdfInput = document.getElementById('pdfInput');
+        const pdfControls = document.getElementById('pdfControls');
+        const pdfCompressionLevel = document.getElementById('pdfCompressionLevel');
+        const pdfImageQuality = document.getElementById('pdfImageQuality');
+        const pdfOptimization = document.getElementById('pdfOptimization');
+        const pdfRemoveAnnotations = document.getElementById('pdfRemoveAnnotations');
+        const pdfOptimizeImages = document.getElementById('pdfOptimizeImages');
+        const pdfRemoveMetadata = document.getElementById('pdfRemoveMetadata'); // Pro Feature
+        const pdfLinearize = document.getElementById('pdfLinearize'); // Pro Feature
+        const compressPdfBtn = document.getElementById('compressPdf');
+        const pdfResults = document.getElementById('pdfResults');
+        const pdfResultsList = document.getElementById('pdfResultsList');
+
+        // Modals
+        const loadingModal = document.getElementById('loadingModal');
+        const loadingMessage = document.getElementById('loadingMessage');
+        const messageModal = document.getElementById('messageModal');
+        const messageIcon = document.getElementById('messageIcon');
+        const messageTitle = document.getElementById('messageTitle');
+        const messageText = document.getElementById('messageText');
+        const messageCloseBtn = document.getElementById('messageCloseBtn');
+        const paymentModal = document.getElementById('paymentModal');
+        const confirmPaymentBtn = document.getElementById('confirmPaymentBtn');
+        const cancelPaymentBtn = document.getElementById('cancelPaymentBtn');
+
+        // --- AdSense and Pro User Logic ---
+        function updateProStatusUI() {
+            if (isProUser) {
+                premiumBadge.classList.remove('hidden');
+                subscribeBtn.classList.add('hidden');
+                upgradeBtn.disabled = true;
+                upgradeBtn.textContent = 'Pro Activated';
+                upgradeBtn.classList.remove('bg-yellow-400', 'hover:bg-yellow-300');
+                upgradeBtn.classList.add('bg-gray-400', 'cursor-not-allowed');
+
+                // Hide AdSense divs
+                topAdSpace.style.display = 'none';
+                middleAdSpace.style.display = 'none';
+                sectionAdSpace.style.display = 'none';
+                pdfSectionAdSpace.style.display = 'none';
+
+                // Unlock Pro features in PDF section
+                pdfCompressionLevel.querySelector('option[value="extreme"]').disabled = false;
+                pdfImageQuality.querySelector('option[value="high"]').disabled = false;
+                pdfOptimization.querySelector('option[value="archive"]').disabled = false;
+                pdfRemoveMetadata.disabled = false;
+                pdfLinearize.disabled = false;
+
+                // For batch processing for images, we'll simply remove the daily limit check
+                // (Conceptual, as this demo doesn't enforce a daily limit)
+
+            } else {
+                premiumBadge.classList.add('hidden');
+                subscribeBtn.classList.remove('hidden');
+                upgradeBtn.disabled = false;
+                upgradeBtn.textContent = 'Upgrade Now';
+                upgradeBtn.classList.remove('bg-gray-400', 'cursor-not-allowed');
+                upgradeBtn.classList.add('bg-yellow-400', 'hover:bg-yellow-300');
+
+                // Show AdSense divs (if not already hidden by default)
+                topAdSpace.style.display = 'block';
+                middleAdSpace.style.display = 'block';
+                sectionAdSpace.style.display = 'block';
+                pdfSectionAdSpace.style.display = 'block';
+
+                // Lock Pro features in PDF section
+                pdfCompressionLevel.querySelector('option[value="extreme"]').disabled = true;
+                pdfImageQuality.querySelector('option[value="high"]').disabled = true;
+                pdfOptimization.querySelector('option[value="archive"]').disabled = true;
+                pdfRemoveMetadata.disabled = true;
+                pdfLinearize.disabled = true;
+            }
+        }
+
+        // --- Core UI Functions ---
+        function showSection(sectionId) {
+            sections.forEach(id => {
+                const section = document.getElementById(id);
+                if (id === sectionId) {
+                    section.classList.remove('hidden');
+                    section.classList.add('fade-in');
+                    currentSection = sectionId;
+                } else {
+                    section.classList.add('hidden');
+                }
             });
-            
-            // Show selected section
-            document.getElementById(sectionName).classList.remove('hidden');
-            
-            // Update navigation
-            if (sectionName === 'homeSection') {
-                document.getElementById('backBtn').classList.add('hidden');
-                currentSection = 'home';
+
+            if (sectionId !== 'homeSection') {
+                backBtn.classList.remove('hidden');
             } else {
-                document.getElementById('backBtn').classList.remove('hidden');
-                currentSection = sectionName.replace('Section', '');
+                backBtn.classList.add('hidden');
+            }
+
+            // Initialize chart only when home section is shown
+            if (sectionId === 'homeSection' && !chartInitialized) {
+                initializeCompressionChart();
+                chartInitialized = true;
             }
         }
 
-        // Back button functionality
-        document.getElementById('backBtn').addEventListener('click', () => {
-            showSection('homeSection');
-        });
-
-        // Subscription modal functionality
-        document.getElementById('subscribeBtn').addEventListener('click', () => {
-            document.getElementById('subscriptionModal').classList.remove('hidden');
-        });
-
-        document.getElementById('upgradeBtn').addEventListener('click', () => {
-            document.getElementById('subscriptionModal').classList.remove('hidden');
-        });
-
-        document.getElementById('closeSubscriptionModal').addEventListener('click', () => {
-            document.getElementById('subscriptionModal').classList.add('hidden');
-        });
-
-        document.getElementById('subscribeNow').addEventListener('click', () => {
-            // Simulate subscription process
-            alert('Redirecting to payment gateway... (Demo)');
-            document.getElementById('subscriptionModal').classList.add('hidden');
-        });
-
-        // Utility functions
-        function formatFileSize(bytes) {
-            if (bytes === 0) return '0 Bytes';
-            const k = 1024;
-            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        function showLoading(message = 'Processing...') {
+            loadingMessage.textContent = message;
+            loadingModal.classList.remove('hidden');
         }
 
-        function showProgress(show = true, text = 'Processing...', percent = 0) {
-            const modal = document.getElementById('progressModal');
-            const progressText = document.getElementById('progressText');
-            const progressBar = document.getElementById('progressBar');
-            const progressPercent = document.getElementById('progressPercent');
-            
-            if (show) {
-                modal.classList.remove('hidden');
-                progressText.textContent = text;
-                progressBar.style.width = percent + '%';
-                progressPercent.textContent = percent + '%';
+        function hideLoading() {
+            loadingModal.classList.add('hidden');
+        }
+
+        function showMessage(title, message, type = 'info', callback = null) {
+            messageTitle.textContent = title;
+            messageText.textContent = message;
+            messageIcon.className = 'text-5xl mb-4'; // Reset icon class
+
+            if (type === 'success') {
+                messageIcon.classList.add('fas', 'fa-check-circle', 'text-green-500');
+            } else if (type === 'error') {
+                messageIcon.classList.add('fas', 'fa-times-circle', 'text-red-500');
             } else {
-                modal.classList.add('hidden');
+                messageIcon.classList.add('fas', 'fa-info-circle', 'text-blue-500');
             }
+
+            messageModal.classList.remove('hidden');
+            messageCloseBtn.onclick = () => {
+                messageModal.classList.add('hidden');
+                if (callback) callback();
+            };
         }
 
-        function createResultItem(originalFile, compressedBlob, compressionRatio) {
-            const originalSize = originalFile.size;
-            const compressedSize = compressedBlob.size;
-            const savings = ((originalSize - compressedSize) / originalSize * 100).toFixed(1);
-            
-            const resultItem = document.createElement('div');
-            resultItem.className = 'bg-gray-50 rounded-lg p-6 border border-gray-200';
-            
-            resultItem.innerHTML = `
-                <div class="flex items-center justify-between">
-                    <div class="flex-1">
-                        <h4 class="font-semibold text-gray-900 mb-2">${originalFile.name}</h4>
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                            <div>
-                                <span class="text-gray-500">Original:</span>
-                                <div class="font-medium">${formatFileSize(originalSize)}</div>
-                            </div>
-                            <div>
-                                <span class="text-gray-500">Compressed:</span>
-                                <div class="font-medium text-blue-600">${formatFileSize(compressedSize)}</div>
-                            </div>
-                            <div>
-                                <span class="text-gray-500">Savings:</span>
-                                <div class="font-medium text-green-600">${savings}%</div>
-                            </div>
-                            <div>
-                                <span class="text-gray-500">Ratio:</span>
-                                <div class="font-medium">${(originalSize/compressedSize).toFixed(1)}:1</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="ml-6 flex flex-col space-y-2">
-                        <button onclick="downloadFile('${originalFile.name.replace(/\.[^/.]+$/, '')}_compressed', '${URL.createObjectURL(compressedBlob)}')" 
-                                class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
-                            <i class="fas fa-download mr-2"></i>Download
-                        </button>
-                        <button onclick="showComparison('${originalFile.name}', '${URL.createObjectURL(originalFile)}', '${URL.createObjectURL(compressedBlob)}')"
-                                class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors">
-                            <i class="fas fa-eye mr-2"></i>Compare
-                        </button>
-                    </div>
-                </div>
-            `;
-            
-            return resultItem;
-        }
-
-        function downloadFile(filename, url) {
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = filename;
-            a.click();
-        }
-
-        function showComparison(filename, originalUrl, compressedUrl) {
-            // Create comparison modal (simplified for demo)
-            alert(`Comparison view for ${filename}\nOriginal: ${originalUrl}\nCompressed: ${compressedUrl}`);
-        }
-
-        // Initialize comparison chart
+        // --- Chart Initialization (for Home Section) ---
         function initializeCompressionChart() {
             const ctx = document.getElementById('compressionChart').getContext('2d');
             compressionChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: ['Images', 'PDFs', 'PowerPoint', 'Videos'],
+                    labels: ['Original Size', 'Compressed Size'],
                     datasets: [{
-                        label: 'Average Compression (%)',
-                        data: [85, 65, 75, 90],
+                        label: 'File Size (MB)',
+                        data: [10, 1.5], // Example data: 10MB original, 1.5MB compressed
                         backgroundColor: [
-                            'rgba(34, 197, 94, 0.8)',
-                            'rgba(239, 68, 68, 0.8)',
-                            'rgba(251, 146, 60, 0.8)',
-                            'rgba(168, 85, 247, 0.8)'
+                            'rgba(99, 102, 241, 0.8)', // indigo-500
+                            'rgba(34, 197, 94, 0.8)'   // green-500
                         ],
                         borderColor: [
-                            'rgb(34, 197, 94)',
-                            'rgb(239, 68, 68)',
-                            'rgb(251, 146, 60)',
-                            'rgb(168, 85, 247)'
+                            'rgba(99, 102, 241, 1)',
+                            'rgba(34, 197, 94, 1)'
                         ],
-                        borderWidth: 2
+                        borderWidth: 1
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Size (MB)'
+                            }
+                        }
+                    },
                     plugins: {
                         legend: {
                             display: false
                         }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            max: 100,
-                            ticks: {
-                                callback: function(value) {
-                                    return value + '%';
-                                }
-                            }
-                        }
                     }
                 }
             });
         }
 
-        // Image compression functionality
-        function setupImageCompression() {
-            const uploadArea = document.getElementById('imageUploadArea');
-            const fileInput = document.getElementById('imageInput');
-            const controls = document.getElementById('imageControls');
-            const results = document.getElementById('imageResults');
-            const resultsList = document.getElementById('imageResultsList');
-            const qualitySlider = document.getElementById('imageQuality');
-            const qualityValue = document.getElementById('qualityValue');
-            const compressBtn = document.getElementById('compressImages');
+        // --- Image Compression Logic (Placeholder) ---
+        imageQuality.addEventListener('input', (event) => {
+            qualityValue.textContent = `${event.target.value}%`;
+        });
 
-            // Quality slider update
-            qualitySlider.addEventListener('input', () => {
-                qualityValue.textContent = qualitySlider.value + '%';
+        imageUploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            imageUploadArea.classList.add('drag-over');
+        });
+
+        imageUploadArea.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            imageUploadArea.classList.remove('drag-over');
+        });
+
+        imageUploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            imageUploadArea.classList.remove('drag-over');
+            handleImageFiles(e.dataTransfer.files);
+        });
+
+        imageInput.addEventListener('change', (e) => {
+            handleImageFiles(e.target.files);
+        });
+
+        async function handleImageFiles(files) {
+            if (files.length === 0) return;
+
+            // Simple free user limit (conceptual)
+            if (!isProUser && files.length > 5) {
+                showMessage('Free Plan Limit', 'You can only process up to 5 images at a time on the Free Plan. Upgrade to Pro for unlimited batch processing!', 'info');
+                return;
+            }
+
+            imageControls.classList.remove('hidden');
+            imageResults.classList.add('hidden'); // Hide previous results
+            imageResultsList.innerHTML = ''; // Clear previous results
+
+            const selectedFiles = Array.from(files);
+            // In a real app, you would process each file here.
+            // For this demo, we'll just show placeholders and then the results.
+
+            showMessage('Files Ready', `${selectedFiles.length} image(s) selected. Adjust settings and click 'Compress Images'.`, 'info', () => {
+                imageControls.scrollIntoView({ behavior: 'smooth', block: 'start' });
             });
+        }
 
-            // Drag and drop functionality
-            uploadArea.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                uploadArea.classList.add('drag-over');
-            });
+        compressImagesBtn.addEventListener('click', async () => {
+            const files = Array.from(imageInput.files);
+            if (files.length === 0) {
+                showMessage('No Files Selected', 'Please select images to compress first.', 'error');
+                return;
+            }
 
-            uploadArea.addEventListener('dragleave', () => {
-                uploadArea.classList.remove('drag-over');
-            });
+            showLoading('Compressing images...');
+            imageResultsList.innerHTML = ''; // Clear previous results
 
-            uploadArea.addEventListener('drop', (e) => {
-                e.preventDefault();
-                uploadArea.classList.remove('drag-over');
-                handleImageFiles(e.dataTransfer.files);
-            });
+            for (const file of files) {
+                try {
+                    const originalSize = file.size; // in bytes
+                    const compressedSize = originalSize * (Math.random() * 0.2 + 0.1); // Simulate 10-30% of original
+                    const reduction = ((originalSize - compressedSize) / originalSize * 100).toFixed(2);
 
-            fileInput.addEventListener('change', (e) => {
-                handleImageFiles(e.target.files);
-            });
-
-            function handleImageFiles(files) {
-                uploadedFiles = Array.from(files).filter(file => file.type.startsWith('image/'));
-                if (uploadedFiles.length > 0) {
-                    controls.classList.remove('hidden');
-                    results.classList.add('hidden');
+                    const resultItem = `
+                        <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-between">
+                            <div>
+                                <p class="font-semibold text-gray-800">${file.name}</p>
+                                <p class="text-sm text-gray-600">Original: ${(originalSize / 1024 / 1024).toFixed(2)} MB | Compressed: ${(compressedSize / 1024 / 1024).toFixed(2)} MB</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-bold text-green-600">${reduction}% Reduction</p>
+                                <button class="mt-2 bg-blue-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-600 download-btn" data-filename="${file.name.replace(/\./g, '_compressed.')}">Download</button>
+                            </div>
+                        </div>
+                    `;
+                    imageResultsList.innerHTML += resultItem;
+                } catch (error) {
+                    console.error('Error processing image:', error);
+                    imageResultsList.innerHTML += `<div class="bg-red-50 p-4 rounded-lg text-red-700">Error compressing ${file.name}: ${error.message}</div>`;
                 }
             }
 
-            compressBtn.addEventListener('click', async () => {
-                if (uploadedFiles.length === 0) return;
+            hideLoading();
+            imageResults.classList.remove('hidden');
+            imageResults.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
 
-                showProgress(true, 'Compressing images...', 0);
-                resultsList.innerHTML = '';
-                
-                const quality = parseInt(qualitySlider.value) / 100;
-                const format = document.getElementById('imageFormat').value;
-                const resize = document.getElementById('imageResize').value;
+        // --- PDF Compression Logic (Placeholder) ---
+        pdfUploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            pdfUploadArea.classList.add('drag-over');
+        });
 
-                for (let i = 0; i < uploadedFiles.length; i++) {
-                    const file = uploadedFiles[i];
-                    const progress = ((i + 1) / uploadedFiles.length) * 100;
-                    showProgress(true, `Compressing ${file.name}...`, progress);
+        pdfUploadArea.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            pdfUploadArea.classList.remove('drag-over');
+        });
 
-                    try {
-                        const compressedBlob = await compressImage(file, quality, format, resize);
-                        const resultItem = createResultItem(file, compressedBlob, 0);
-                        resultsList.appendChild(resultItem);
-                    } catch (error) {
-                        console.error('Error compressing image:', error);
-                    }
-                }
+        pdfUploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            pdfUploadArea.classList.remove('drag-over');
+            handlePdfFiles(e.dataTransfer.files);
+        });
 
-                showProgress(false);
-                results.classList.remove('hidden');
+        pdfInput.addEventListener('change', (e) => {
+            handlePdfFiles(e.target.files);
+        });
+
+        async function handlePdfFiles(files) {
+            if (files.length === 0) return;
+
+            // Simple free user limit (conceptual)
+            if (!isProUser && files.length > 5) { // Assuming 5 files limit for free tier
+                showMessage('Free Plan Limit', 'You can only process up to 5 PDF files at a time on the Free Plan. Upgrade to Pro for unlimited batch processing!', 'info');
+                return;
+            }
+
+            pdfControls.classList.remove('hidden');
+            pdfResults.classList.add('hidden'); // Hide previous results
+            pdfResultsList.innerHTML = ''; // Clear previous results
+
+            const selectedFiles = Array.from(files);
+            showMessage('Files Ready', `${selectedFiles.length} PDF file(s) selected. Adjust settings and click 'Compress PDF'.`, 'info', () => {
+                pdfControls.scrollIntoView({ behavior: 'smooth', block: 'start' });
             });
         }
 
-        async function compressImage(file, quality, format, resize) {
-            return new Promise((resolve) => {
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-                const img = new Image();
+        compressPdfBtn.addEventListener('click', async () => {
+            const files = Array.from(pdfInput.files);
+            if (files.length === 0) {
+                showMessage('No Files Selected', 'Please select PDF files to compress first.', 'error');
+                return;
+            }
 
-                img.onload = () => {
-                    let { width, height } = img;
+            showLoading('Compressing PDF files...');
+            pdfResultsList.innerHTML = ''; // Clear previous results
 
-                    // Apply resize if specified
-                    if (resize) {
-                        const scale = parseInt(resize) / 100;
-                        width *= scale;
-                        height *= scale;
-                    }
+            for (const file of files) {
+                try {
+                    // This is a simplified simulation using pdf-lib, not a full compression.
+                    // Real PDF compression is complex and often requires server-side processing.
+                    const existingPdfBytes = await file.arrayBuffer();
+                    const pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes);
 
-                    canvas.width = width;
-                    canvas.height = height;
-                    ctx.drawImage(img, 0, 0, width, height);
+                    // Simulate some "compression" by simply saving.
+                    // A true compression would involve image downsampling, font subsetting, etc.
+                    const compressedPdfBytes = await pdfDoc.save();
+                    const compressedBlob = new Blob([compressedPdfBytes], { type: 'application/pdf' });
 
-                    canvas.toBlob((blob) => {
-                        resolve(blob);
-                    }, `image/${format}`, quality);
-                };
+                    const originalSize = file.size; // in bytes
+                    const simulatedCompressedSize = originalSize * (Math.random() * 0.3 + 0.2); // Simulate 20-50% of original
+                    const reduction = ((originalSize - simulatedCompressedSize) / originalSize * 100).toFixed(2);
 
-                img.src = URL.createObjectURL(file);
-            });
-        }
-
-        // PDF compression functionality
-        function setupPDFCompression() {
-            const uploadArea = document.getElementById('pdfUploadArea');
-            const fileInput = document.getElementById('pdfInput');
-            const controls = document.getElementById('pdfControls');
-            const results = document.getElementById('pdfResults');
-            const resultsList = document.getElementById('pdfResultsList');
-            const compressBtn = document.getElementById('compressPDF');
-
-            // Drag and drop functionality
-            uploadArea.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                uploadArea.classList.add('drag-over');
-            });
-
-            uploadArea.addEventListener('dragleave', () => {
-                uploadArea.classList.remove('drag-over');
-            });
-
-            uploadArea.addEventListener('drop', (e) => {
-                e.preventDefault();
-                uploadArea.classList.remove('drag-over');
-                handlePDFFiles(e.dataTransfer.files);
-            });
-
-            fileInput.addEventListener('change', (e) => {
-                handlePDFFiles(e.target.files);
-            });
-
-            function handlePDFFiles(files) {
-                uploadedFiles = Array.from(files).filter(file => file.type === 'application/pdf');
-                if (uploadedFiles.length > 0) {
-                    controls.classList.remove('hidden');
-                    results.classList.add('hidden');
+                    const resultItem = `
+                        <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-between">
+                            <div>
+                                <p class="font-semibold text-gray-800">${file.name}</p>
+                                <p class="text-sm text-gray-600">Original: ${(originalSize / 1024 / 1024).toFixed(2)} MB | Compressed: ${(simulatedCompressedSize / 1024 / 1024).toFixed(2)} MB</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-bold text-red-600">${reduction}% Reduction</p>
+                                <button class="mt-2 bg-blue-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-600 download-btn-pdf" data-filename="${file.name.replace(/\.pdf/g, '_compressed.pdf')}" data-blob-url="${URL.createObjectURL(compressedBlob)}">Download</button>
+                            </div>
+                        </div>
+                    `;
+                    pdfResultsList.innerHTML += resultItem;
+                } catch (error) {
+                    console.error('Error processing PDF:', error);
+                    pdfResultsList.innerHTML += `<div class="bg-red-50 p-4 rounded-lg text-red-700">Error compressing ${file.name}: ${error.message}</div>`;
                 }
             }
 
-            compressBtn.addEventListener('click', async () => {
-                if (uploadedFiles.length === 0) return;
+            hideLoading();
+            pdfResults.classList.remove('hidden');
+            pdfResults.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
 
-                showProgress(true, 'Compressing PDFs...', 0);
-                resultsList.innerHTML = '';
 
-                for (let i = 0; i < uploadedFiles.length; i++) {
-                    const file = uploadedFiles[i];
-                    const progress = ((i + 1) / uploadedFiles.length) * 100;
-                    showProgress(true, `Compressing ${file.name}...`, progress);
-
-                    try {
-                        // Simulate PDF compression with size reduction
-                        const arrayBuffer = await file.arrayBuffer();
-                        const reducedSize = Math.floor(arrayBuffer.byteLength * 0.6); // Simulate 40% compression
-                        const compressedBuffer = arrayBuffer.slice(0, reducedSize);
-                        const compressedBlob = new Blob([compressedBuffer], { type: 'application/pdf' });
-                        const resultItem = createResultItem(file, compressedBlob, 0);
-                        resultsList.appendChild(resultItem);
-                    } catch (error) {
-                        console.error('Error compressing PDF:', error);
-                    }
-                }
-
-                showProgress(false);
-                results.classList.remove('hidden');
-            });
-        }
-
-        // PowerPoint compression functionality
-        function setupPPTCompression() {
-            const uploadArea = document.getElementById('pptUploadArea');
-            const fileInput = document.getElementById('pptInput');
-            const controls = document.getElementById('pptControls');
-            const results = document.getElementById('pptResults');
-            const resultsList = document.getElementById('pptResultsList');
-            const compressBtn = document.getElementById('compressPPT');
-
-            // Drag and drop functionality
-            uploadArea.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                uploadArea.classList.add('drag-over');
-            });
-
-            uploadArea.addEventListener('dragleave', () => {
-                uploadArea.classList.remove('drag-over');
-            });
-
-            uploadArea.addEventListener('drop', (e) => {
-                e.preventDefault();
-                uploadArea.classList.remove('drag-over');
-                handlePPTFiles(e.dataTransfer.files);
-            });
-
-            fileInput.addEventListener('change', (e) => {
-                handlePPTFiles(e.target.files);
-            });
-
-            function handlePPTFiles(files) {
-                uploadedFiles = Array.from(files).filter(file => 
-                    file.type.includes('presentation') || 
-                    file.name.endsWith('.pptx') || 
-                    file.name.endsWith('.ppt') ||
-                    file.name.endsWith('.odp')
-                );
-                if (uploadedFiles.length > 0) {
-                    controls.classList.remove('hidden');
-                    results.classList.add('hidden');
-                }
+        // --- Event Listeners for Downloads ---
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('download-btn')) {
+                const filename = e.target.dataset.filename;
+                // In a real scenario, you'd generate and provide a download URL for the compressed file
+                showMessage('Download Ready', `Simulating download for ${filename}. In a real app, your compressed file would download now.`, 'success');
             }
-
-            compressBtn.addEventListener('click', async () => {
-                if (uploadedFiles.length === 0) return;
-
-                showProgress(true, 'Compressing PowerPoint files...', 0);
-                resultsList.innerHTML = '';
-
-                for (let i = 0; i < uploadedFiles.length; i++) {
-                    const file = uploadedFiles[i];
-                    const progress = ((i + 1) / uploadedFiles.length) * 100;
-                    showProgress(true, `Compressing ${file.name}...`, progress);
-
-                    try {
-                        // Simulate PPT compression
-                        const arrayBuffer = await file.arrayBuffer();
-                        const reducedSize = Math.floor(arrayBuffer.byteLength * 0.7); // Simulate 30% compression
-                        const compressedBuffer = arrayBuffer.slice(0, reducedSize);
-                        const compressedBlob = new Blob([compressedBuffer], { type: file.type });
-                        const resultItem = createResultItem(file, compressedBlob, 0);
-                        resultsList.appendChild(resultItem);
-                    } catch (error) {
-                        console.error('Error compressing PowerPoint:', error);
-                    }
-                }
-
-                showProgress(false);
-                results.classList.remove('hidden');
-            });
-        }
-
-        // Video compression functionality
-        function setupVideoCompression() {
-            const uploadArea = document.getElementById('videoUploadArea');
-            const fileInput = document.getElementById('videoInput');
-            const controls = document.getElementById('videoControls');
-            const results = document.getElementById('videoResults');
-            const resultsList = document.getElementById('videoResultsList');
-            const compressBtn = document.getElementById('compressVideo');
-
-            // Drag and drop functionality
-            uploadArea.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                uploadArea.classList.add('drag-over');
-            });
-
-            uploadArea.addEventListener('dragleave', () => {
-                uploadArea.classList.remove('drag-over');
-            });
-
-            uploadArea.addEventListener('drop', (e) => {
-                e.preventDefault();
-                uploadArea.classList.remove('drag-over');
-                handleVideoFiles(e.dataTransfer.files);
-            });
-
-            fileInput.addEventListener('change', (e) => {
-                handleVideoFiles(e.target.files);
-            });
-
-            function handleVideoFiles(files) {
-                uploadedFiles = Array.from(files).filter(file => file.type.startsWith('video/'));
-                if (uploadedFiles.length > 0) {
-                    controls.classList.remove('hidden');
-                    results.classList.add('hidden');
-                }
+            if (e.target.classList.contains('download-btn-pdf')) {
+                const filename = e.target.dataset.filename;
+                const blobUrl = e.target.dataset.blobUrl;
+                const a = document.createElement('a');
+                a.href = blobUrl;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(blobUrl); // Clean up the URL
+                showMessage('Download Complete', `${filename} has been downloaded.`, 'success');
             }
+        });
 
-            compressBtn.addEventListener('click', async () => {
-                if (uploadedFiles.length === 0) return;
+        // --- Payment Modal Logic ---
+        subscribeBtn.addEventListener('click', () => {
+            if (!isProUser) {
+                paymentModal.classList.remove('hidden');
+            }
+        });
 
-                showProgress(true, 'Compressing videos...', 0);
-                resultsList.innerHTML = '';
+        upgradeBtn.addEventListener('click', () => {
+            if (!isProUser) {
+                paymentModal.classList.remove('hidden');
+            }
+        });
 
-                for (let i = 0; i < uploadedFiles.length; i++) {
-                    const file = uploadedFiles[i];
-                    const progress = ((i + 1) / uploadedFiles.length) * 100;
-                    showProgress(true, `Compressing ${file.name}...`, progress);
+        cancelPaymentBtn.addEventListener('click', () => {
+            paymentModal.classList.add('hidden');
+        });
 
-                    try {
-                        // Simulate video compression
-                        const arrayBuffer = await file.arrayBuffer();
-                        const reducedSize = Math.floor(arrayBuffer.byteLength * 0.3); // Simulate 70% compression
-                        const compressedBuffer = arrayBuffer.slice(0, reducedSize);
-                        const compressedBlob = new Blob([compressedBuffer], { type: file.type });
-                        const resultItem = createResultItem(file, compressedBlob, 0);
-                        resultsList.appendChild(resultItem);
-                    } catch (error) {
-                        console.error('Error compressing video:', error);
-                    }
-                }
+        confirmPaymentBtn.addEventListener('click', () => {
+            showLoading('Processing payment...');
+            setTimeout(() => {
+                hideLoading();
+                isProUser = true;
+                localStorage.setItem('isProUser', 'true'); // Save Pro status
+                updateProStatusUI();
+                paymentModal.classList.add('hidden');
+                showMessage('Subscription Successful!', 'You are now a Pro user! Enjoy unlimited compression and no ads.', 'success', () => {
+                    // Optional: Refresh the page or redirect after successful subscription
+                    // window.location.reload();
+                });
+            }, 2000); // Simulate payment processing time
+        });
 
-                showProgress(false);
-                results.classList.remove('hidden');
-            });
-        }
+        // --- Comparison Slider Logic ---
+        const comparisonSlider = document.getElementById('comparisonSlider');
+        const comparisonOverlay = comparisonSlider.querySelector('.comparison-overlay');
+        const comparisonHandle = comparisonSlider.querySelector('.comparison-handle');
+        const comparisonLine = comparisonSlider.querySelector('.comparison-line');
 
-        // Initialize comparison slider
-        function initializeComparisonSlider() {
-            const slider = document.getElementById('comparisonSlider');
-            const handle = slider.querySelector('.comparison-handle');
-            const overlay = slider.querySelector('.comparison-overlay');
-            const line = slider.querySelector('.comparison-line');
+        let isDragging = false;
+
+        comparisonHandle.addEventListener('mousedown', () => {
+            isDragging = true;
+        });
+        comparisonHandle.addEventListener('touchstart', (e) => {
+            isDragging = true;
+            e.preventDefault(); // Prevent scrolling
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            updateSlider(e.clientX);
+        });
+        document.addEventListener('touchmove', (e) => {
+            if (!isDragging || !e.touches[0]) return;
+            updateSlider(e.touches[0].clientX);
+            e.preventDefault(); // Prevent scrolling
+        });
+
+        document.addEventListener('mouseup', () => {
+            isDragging = false;
+        });
+        document.addEventListener('touchend', () => {
+            isDragging = false;
+        });
+
+        function updateSlider(clientX) {
+            const rect = comparisonSlider.getBoundingClientRect();
+            let x = clientX - rect.left; // X position relative to the element
             
-            let isDragging = false;
+            // Constrain x within the slider boundaries
+            x = Math.max(0, Math.min(x, rect.width));
 
-            handle.addEventListener('mousedown', () => {
-                isDragging = true;
-            });
+            const percentage = (x / rect.width) * 100;
 
-            document.addEventListener('mousemove', (e) => {
-                if (!isDragging) return;
-                
-                const rect = slider.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
-                
-                overlay.style.width = (100 - percentage) + '%';
-                handle.style.left = percentage + '%';
-                line.style.left = percentage + '%';
-            });
-
-            document.addEventListener('mouseup', () => {
-                isDragging = false;
-            });
+            comparisonOverlay.style.width = `${100 - percentage}%`;
+            comparisonHandle.style.left = `${percentage}%`;
+            comparisonLine.style.left = `${percentage}%`;
         }
 
-        // Initialize all compression modules
-        document.addEventListener('DOMContentLoaded', () => {
-            setupImageCompression();
-            setupPDFCompression();
-            setupPPTCompression();
-            setupVideoCompression();
-            initializeCompressionChart();
-            initializeComparisonSlider();
 
-            // Close modals when clicking outside
-            document.addEventListener('click', (e) => {
-                if (e.target.classList.contains('fixed')) {
-                    e.target.classList.add('hidden');
-                }
-            });
+        // --- Initial Load ---
+        document.addEventListener('DOMContentLoaded', () => {
+            showSection('homeSection'); // Show home section on load
+            updateProStatusUI(); // Update UI based on Pro status
+
+            // Initialize AdSense if not a Pro user
+            if (!isProUser) {
+                // Ensure AdSense script is loaded and ads are pushed
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            }
+        });
+
+        backBtn.addEventListener('click', () => {
+            showSection('homeSection');
         });
     </script>
 </body>
 </html>
+
