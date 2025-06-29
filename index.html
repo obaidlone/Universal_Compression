@@ -47,6 +47,7 @@
             overflow: hidden;
             border-radius: 12px;
             background-color: #f0f0f0; /* Fallback background */
+            margin-bottom: 1.5rem; /* Space below the slider */
         }
         .image-comparison-container img {
             position: absolute;
@@ -254,23 +255,23 @@
                 </div>
             </div>
 
-            <!-- Before/After Comparison Section -->
+            <!-- Before/After Comparison Section - Removed from Home Section -->
             <div class="bg-white rounded-xl p-8 shadow-lg mb-12">
-                <h3 class="text-2xl font-bold text-gray-900 mb-6 text-center">See the Difference</h3>
+                <h3 class="text-2xl font-bold text-gray-900 mb-6 text-center">See the Difference (Example)</h3>
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <div>
-                        <h4 class="text-lg font-semibold mb-4">Interactive Before/After Comparison</h4>
-                        <!-- New Image Comparison Slider -->
+                        <h4 class="text-lg font-semibold mb-4">Static Before/After Comparison</h4>
+                        <!-- Static Image Comparison Slider - Placeholder for general demonstration -->
                         <div class="relative w-full max-w-xl mx-auto image-comparison-container">
                             <div class="absolute top-0 left-0 w-full h-full">
-                                <img id="originalImage" src="https://placehold.co/600x400/007bff/ffffff?text=Original" alt="Original Image" class="w-full h-full object-cover rounded-lg" />
+                                <img src="https://placehold.co/600x400/FF0000/FFFFFF?text=Original" alt="Original Image" class="w-full h-full object-cover rounded-lg" />
                             </div>
-                            <div class="absolute top-0 left-0 w-full h-full overflow-hidden" id="sliderWrapper">
-                                <img id="compressedImage" src="https://placehold.co/600x400/28a745/ffffff?text=Compressed" alt="Compressed Image" class="w-full h-full object-cover rounded-lg" />
+                            <div class="absolute top-0 left-0 w-full h-full overflow-hidden">
+                                <img src="https://placehold.co/600x400/00FF00/FFFFFF?text=Compressed" alt="Compressed Image" class="w-full h-full object-cover rounded-lg" />
                             </div>
-                            <input type="range" min="0" max="100" value="50" id="slider">
+                            <!-- Static slider has no interactive functionality -->
                         </div>
-                        <p class="text-sm text-gray-500 text-center mt-4">Drag the slider to compare original vs. compressed image quality.</p>
+                        <p class="text-sm text-gray-500 text-center mt-4">This is a static example of image compression.</p>
                     </div>
                     <div>
                         <h4 class="text-lg font-semibold mb-4">Compression Statistics</h4>
@@ -280,6 +281,7 @@
                     </div>
                 </div>
             </div>
+
 
             <!-- Google Ad Space - Middle Banner -->
             <div id="middleAdSpace" class="ad-space mb-12">
@@ -388,6 +390,19 @@
                         </button>
                     </div>
                 </div>
+
+                <!-- Dynamic Image Comparison Slider - Moved to Image Section -->
+                <div id="dynamicImageComparison" class="relative w-full max-w-xl mx-auto image-comparison-container hidden">
+                    <div class="absolute top-0 left-0 w-full h-full">
+                        <img id="originalImage" src="" alt="Original Image" class="w-full h-full object-cover rounded-lg" />
+                    </div>
+                    <div class="absolute top-0 left-0 w-full h-full overflow-hidden" id="sliderWrapper">
+                        <img id="compressedImage" src="" alt="Compressed Image" class="w-full h-full object-cover rounded-lg" />
+                    </div>
+                    <input type="range" min="0" max="100" value="50" id="slider">
+                </div>
+                <p id="sliderCaption" class="text-sm text-gray-500 text-center mt-4 hidden">Drag the slider to compare original vs. compressed image quality.</p>
+
 
                 <!-- Results Area -->
                 <div id="imageResults" class="hidden">
@@ -714,9 +729,9 @@
         let currentSection = 'homeSection';
         let chartInitialized = false;
         let compressionChart;
+        let originalImageFile = null; // To store the original image for the slider
 
         // DOM Elements
-        // Added the new section IDs to the 'sections' array
         const sections = ['homeSection', 'imageSection', 'pdfSection', 'pptSection', 'videoSection', 'privacyPolicySection', 'contactUsSection', 'termsOfServiceSection'];
         const backBtn = document.getElementById('backBtn');
         
@@ -735,6 +750,14 @@
         const compressImagesBtn = document.getElementById('compressImages');
         const imageResults = document.getElementById('imageResults');
         const imageResultsList = document.getElementById('imageResultsList');
+
+        // Slider elements - now referenced from imageSection
+        const dynamicImageComparison = document.getElementById('dynamicImageComparison');
+        const originalImageElement = document.getElementById('originalImage');
+        const compressedImageElement = document.getElementById('compressedImage');
+        const slider = document.getElementById('slider');
+        const sliderWrapper = document.getElementById('sliderWrapper');
+        const sliderCaption = document.getElementById('sliderCaption');
 
         // PDF compression elements
         const pdfUploadArea = document.getElementById('pdfUploadArea');
@@ -820,7 +843,7 @@
             });
         }
 
-        // --- Image Compression Logic (Placeholder) ---
+        // --- Image Compression Logic ---
         imageQuality.addEventListener('input', (event) => {
             qualityValue.textContent = `${event.target.value}%`;
         });
@@ -851,9 +874,15 @@
                 return;
             }
 
+            // Store the first image for the slider comparison
+            originalImageFile = files[0];
+            originalImageElement.src = URL.createObjectURL(originalImageFile);
+            
             imageControls.classList.remove('hidden');
             imageResults.classList.add('hidden'); // Hide previous results
             imageResultsList.innerHTML = ''; // Clear previous results
+            dynamicImageComparison.classList.add('hidden'); // Hide slider until compression
+            sliderCaption.classList.add('hidden');
 
             const selectedFiles = Array.from(files);
             console.log(`${selectedFiles.length} image(s) selected.`);
@@ -869,11 +898,40 @@
 
             console.log('Compressing images...');
             imageResultsList.innerHTML = ''; // Clear previous results
+            
+            // Hide previous comparison and reset slider
+            dynamicImageComparison.classList.add('hidden');
+            sliderCaption.classList.add('hidden');
+            slider.value = 50; // Reset slider position
 
             for (const file of files) {
                 try {
                     const originalSize = file.size; // in bytes
-                    const compressedSize = originalSize * (Math.random() * 0.2 + 0.1); // Simulate 10-30% of original
+
+                    // Simulate image compression using canvas
+                    const img = new Image();
+                    img.src = URL.createObjectURL(file);
+
+                    await new Promise(resolve => img.onload = resolve); // Ensure image is loaded
+
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+
+                    const quality = parseInt(imageQuality.value) / 100; // Get selected quality
+                    const resizeFactor = parseFloat(imageResize.value || 100) / 100;
+
+                    canvas.width = img.width * resizeFactor;
+                    canvas.height = img.height * resizeFactor;
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+                    const mimeType = imageFormat.value === 'png' ? 'image/png' : 
+                                     imageFormat.value === 'webp' ? 'image/webp' : 'image/jpeg';
+                    
+                    const compressedBlob = await new Promise(resolve => {
+                        canvas.toBlob(resolve, mimeType, quality);
+                    });
+
+                    const compressedSize = compressedBlob.size; // in bytes
                     const reduction = ((originalSize - compressedSize) / originalSize * 100).toFixed(2);
 
                     const resultItem = `
@@ -884,11 +942,20 @@
                             </div>
                             <div class="text-right">
                                 <p class="font-bold text-green-600">${reduction}% Reduction</p>
-                                <button class="mt-2 bg-blue-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-600 download-btn" data-filename="${file.name.replace(/\./g, '_compressed.')}">Download</button>
+                                <button class="mt-2 bg-blue-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-600 download-btn" data-filename="${file.name.replace(/\.[^/.]+$/, `_compressed.${imageFormat.value}`)}" data-blob-url="${URL.createObjectURL(compressedBlob)}">Download</button>
                             </div>
                         </div>
                     `;
                     imageResultsList.innerHTML += resultItem;
+
+                    // Update slider only for the first image
+                    if (file === originalImageFile) {
+                        originalImageElement.src = URL.createObjectURL(file); // Ensure original is set
+                        compressedImageElement.src = URL.createObjectURL(compressedBlob);
+                        dynamicImageComparison.classList.remove('hidden');
+                        sliderCaption.classList.remove('hidden');
+                    }
+                    URL.revokeObjectURL(img.src); // Clean up
                 } catch (error) {
                     console.error('Error processing image:', error);
                     imageResultsList.innerHTML += `<div class="bg-red-50 p-4 rounded-lg text-red-700">Error compressing ${file.name}: ${error.message}</div>`;
@@ -991,8 +1058,19 @@
         document.addEventListener('click', (e) => {
             if (e.target.classList.contains('download-btn')) {
                 const filename = e.target.dataset.filename;
-                console.log(`Simulating download for ${filename}.`);
-                // In a real app, you'd generate and provide a download URL for the compressed file
+                const blobUrl = e.target.dataset.blobUrl;
+                if (blobUrl) {
+                    const a = document.createElement('a');
+                    a.href = blobUrl;
+                    a.download = filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(blobUrl); // Clean up the URL
+                    console.log(`${filename} has been downloaded.`);
+                } else {
+                    console.log(`Simulating download for ${filename}.`);
+                }
             }
             if (e.target.classList.contains('download-btn-pdf')) {
                 const filename = e.target.dataset.filename;
@@ -1008,9 +1086,7 @@
             }
         });
 
-        // --- Comparison Slider Logic (from user's snippet) ---
-        const slider = document.getElementById('slider');
-        const sliderWrapper = document.getElementById('sliderWrapper');
+        // --- Comparison Slider Logic ---
         if (slider && sliderWrapper) { // Ensure elements exist before adding listener
             slider.addEventListener('input', () => {
                 sliderWrapper.style.width = `${slider.value}%`;
@@ -1032,6 +1108,7 @@
     </script>
 </body>
 </html>
+
 
 
 
