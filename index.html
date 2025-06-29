@@ -113,28 +113,7 @@
         @media print {
             .no-print { display: none !important; }
         }
-        /* Modal Styles */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-        .modal-content {
-            background: white;
-            padding: 2rem;
-            border-radius: 0.75rem;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-            width: 90%;
-            max-width: 500px;
-            animation: fadeIn 0.3s ease-out;
-        }
+        /* Modal Styles - Removed as per last instruction (no payment modals) */
     </style>
 </head>
 <body class="bg-gradient-to-br from-blue-50 to-indigo-100">
@@ -145,10 +124,8 @@
                 <div class="flex items-center">
                     <i class="fas fa-compress-alt text-3xl text-blue-600 mr-3"></i>
                     <h1 class="text-2xl font-bold text-gray-900">Compressor Pro</h1>
-                    <!-- Removed premium badge as there's no Pro tier anymore -->
                 </div>
                 <div class="flex items-center space-x-4">
-                    <!-- Removed subscribe button as there's no Pro tier anymore -->
                     <button id="backBtn" class="hidden bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-lg transition-colors">
                         <i class="fas fa-arrow-left mr-2"></i>Back to Home
                     </button>
@@ -347,8 +324,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Removed Subscription Plans Section -->
         </section>
 
         <!-- Image Compression Section -->
@@ -600,13 +575,140 @@
             </div>
         </section>
 
-        <!-- Removed Modals: Loading, Message, Payment -->
+        <!-- Privacy Policy Section -->
+        <section id="privacyPolicySection" class="hidden fade-in">
+            <div class="bg-white rounded-xl p-8 shadow-lg mb-8">
+                <h2 class="text-3xl font-bold text-gray-900 mb-6 text-center">Privacy Policy</h2>
+                <div class="text-gray-700 space-y-4">
+                    <p>This Privacy Policy describes how Compressor Pro ("we," "us," or "our") collects, uses, and discloses your information when you use our web application. We are committed to protecting your privacy and ensuring a secure experience.</p>
+
+                    <h3 class="text-xl font-semibold mt-6 mb-2">1. Information We Collect</h3>
+                    <p><strong>Files for Processing:</strong> When you upload files for compression (e.g., images, PDFs), these files are processed directly in your browser. We do not store or transmit your files to our servers. Once the compression is complete or the browser tab is closed, the file data is removed from our application's memory.</p>
+                    <p><strong>Non-Personal Information:</strong> We may collect non-personal information such as browser type, operating system, and anonymous usage data (e.g., how often features are used, aggregated compression statistics) to improve our service. This data is not linked to individual users.</p>
+                    <p><strong>Google AdSense:</strong> Our website uses Google AdSense to display advertisements. Google may use cookies and other technologies to serve ads based on your prior visits to our website or other websites. Google's use of advertising cookies enables it and its partners to serve ads to your users based on their visit to your sites and/or other sites on the Internet. You may opt out of personalized advertising by visiting <a href="https://www.aboutads.info/choices/" target="_blank" class="text-blue-600 hover:underline">Ads Settings</a>.</p>
+
+                    <h3 class="text-xl font-semibold mt-6 mb-2">2. How We Use Your Information</h3>
+                    <p>The information collected is used solely for the purpose of providing and improving the Compressor Pro service:</p>
+                    <ul>
+                        <li>To enable file compression directly within your browser.</li>
+                        <li>To analyze usage patterns and improve user experience (through aggregated, non-personal data).</li>
+                        <li>To display relevant advertisements through Google AdSense.</li>
+                    </ul>
+
+                    <h3 class="text-xl font-semibold mt-6 mb-2">3. Data Security</h3>
+                    <p>We prioritize the security of your data. As files are processed client-side (in your browser), they are not uploaded to our servers, significantly reducing data transmission risks. We implement industry-standard security measures for our website to protect against unauthorized access, alteration, disclosure, or destruction of any information.</p>
+
+                    <h3 class="text-xl font-semibold mt-6 mb-2">4. Third-Party Links</h3>
+                    <p>Our website may contain links to third-party websites or services. We are not responsible for the privacy practices or content of these third-party sites. We encourage you to review the privacy policies of any third-party sites you visit.</p>
+
+                    <h3 class="text-xl font-semibold mt-6 mb-2">5. Changes to This Privacy Policy</h3>
+                    <p>We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page. You are advised to review this Privacy Policy periodically for any changes. Changes to this Privacy Policy are effective when they are posted on this page.</p>
+
+                    <h3 class="text-xl font-semibold mt-6 mb-2">6. Contact Us</h3>
+                    <p>If you have any questions about this Privacy Policy, please contact us via the <span class="text-blue-600 cursor-pointer hover:underline" onclick="showSection('contactUsSection')">Contact Us</span> section.</p>
+                </div>
+                <div class="mt-8 text-center">
+                    <button onclick="showSection('homeSection')" class="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-300 transition-colors">
+                        Back to Home
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Us Section -->
+        <section id="contactUsSection" class="hidden fade-in">
+            <div class="bg-white rounded-xl p-8 shadow-lg mb-8">
+                <h2 class="text-3xl font-bold text-gray-900 mb-6 text-center">Contact Us</h2>
+                <div class="text-gray-700 space-y-4 max-w-2xl mx-auto">
+                    <p>We value your feedback and are here to assist you. Please use the following methods to get in touch with us:</p>
+
+                    <div class="flex items-center space-x-4">
+                        <i class="fas fa-envelope text-2xl text-blue-600"></i>
+                        <div>
+                            <h3 class="text-xl font-semibold">Email Support</h3>
+                            <p>For general inquiries, technical support, or feedback, please email us at:</p>
+                            <p class="font-medium text-blue-600">support@compressorpro.com</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-4 mt-6">
+                        <i class="fas fa-address-card text-2xl text-blue-600"></i>
+                        <div>
+                            <h3 class="text-xl font-semibold">Our Office (Conceptual)</h3>
+                            <p>While our operations are primarily online, our main office is located at:</p>
+                            <p class="font-medium">123 Compression Drive, Tech City, TX 78701, USA</p>
+                            <p class="text-sm text-gray-500">(Please note: This is a conceptual address for illustrative purposes.)</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-4 mt-6">
+                        <i class="fas fa-business-time text-2xl text-blue-600"></i>
+                        <div>
+                            <h3 class="text-xl font-semibold">Business Hours</h3>
+                            <p>Our support team is available:</p>
+                            <p class="font-medium">Monday - Friday: 9:00 AM - 5:00 PM (Your Local Time)</p>
+                        </div>
+                    </div>
+
+                    <p class="pt-4">We aim to respond to all inquiries within 24-48 business hours.</p>
+                </div>
+                <div class="mt-8 text-center">
+                    <button onclick="showSection('homeSection')" class="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-300 transition-colors">
+                        Back to Home
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Terms of Service Section (Placeholder - Can be expanded similarly) -->
+        <section id="termsOfServiceSection" class="hidden fade-in">
+            <div class="bg-white rounded-xl p-8 shadow-lg mb-8">
+                <h2 class="text-3xl font-bold text-gray-900 mb-6 text-center">Terms of Service</h2>
+                <div class="text-gray-700 space-y-4">
+                    <p>Welcome to Compressor Pro. By accessing or using our web application, you agree to comply with and be bound by the following Terms of Service. Please review them carefully.</p>
+
+                    <h3 class="text-xl font-semibold mt-6 mb-2">1. Acceptance of Terms</h3>
+                    <p>By using Compressor Pro, you signify your agreement to these Terms. If you do not agree, please do not use our service.</p>
+
+                    <h3 class="text-xl font-semibold mt-6 mb-2">2. Service Description</h3>
+                    <p>Compressor Pro provides a free online tool for compressing various file types directly in your browser. Our service aims to reduce file sizes while maintaining quality, but we do not guarantee specific compression ratios or perfect quality preservation.</p>
+
+                    <h3 class="text-xl font-semibold mt-6 mb-2">3. User Responsibilities</h3>
+                    <ul>
+                        <li>You are responsible for the content of the files you upload. Do not upload illegal, harmful, or copyrighted material without permission.</li>
+                        <li>You agree not to use the service for any unlawful or prohibited activities.</li>
+                        <li>You acknowledge that file processing occurs client-side and no files are stored on our servers.</li>
+                    </ul>
+                    
+                    <h3 class="text-xl font-semibold mt-6 mb-2">4. Disclaimer of Warranties</h3>
+                    <p>Compressor Pro is provided "as is" without any warranties, express or implied. We do not warrant that the service will be uninterrupted, error-free, or completely secure.</p>
+
+                    <h3 class="text-xl font-semibold mt-6 mb-2">5. Limitation of Liability</h3>
+                    <p>In no event shall Compressor Pro be liable for any direct, indirect, incidental, special, consequential, or punitive damages arising out of your use or inability to use the service.</p>
+
+                    <h3 class="text-xl font-semibold mt-6 mb-2">6. Changes to Terms</h3>
+                    <p>We reserve the right to modify these Terms at any time. Your continued use of the service after any such changes constitutes your acceptance of the new Terms.</p>
+
+                    <h3 class="text-xl font-semibold mt-6 mb-2">7. Governing Law</h3>
+                    <p>These Terms shall be governed by and construed in accordance with the laws of the jurisdiction where Compressor Pro is operated, without regard to its conflict of law principles.</p>
+                </div>
+                <div class="mt-8 text-center">
+                    <button onclick="showSection('homeSection')" class="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-300 transition-colors">
+                        Back to Home
+                    </button>
+                </div>
+            </div>
+        </section>
+
     </div>
 
     <!-- Footer -->
     <footer class="bg-white border-t border-gray-200 py-6 mt-12 no-print">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-600 text-sm">
-            &copy; 2025 Compressor Pro. All rights reserved. | <a href="#" class="text-blue-600 hover:underline">Privacy Policy</a> | <a href="#" class="text-blue-600 hover:underline">Terms of Service</a>
+            &copy; 2025 Compressor Pro. All rights reserved. | 
+            <a href="#" onclick="showSection('privacyPolicySection'); return false;" class="text-blue-600 hover:underline">Privacy Policy</a> | 
+            <a href="#" onclick="showSection('termsOfServiceSection'); return false;" class="text-blue-600 hover:underline">Terms of Service</a> |
+            <a href="#" onclick="showSection('contactUsSection'); return false;" class="text-blue-600 hover:underline">Contact Us</a>
         </div>
     </footer>
 
@@ -617,7 +719,7 @@
         let compressionChart;
 
         // DOM Elements
-        const sections = ['homeSection', 'imageSection', 'pdfSection', 'pptSection', 'videoSection'];
+        const sections = ['homeSection', 'imageSection', 'pdfSection', 'pptSection', 'videoSection', 'privacyPolicySection', 'contactUsSection', 'termsOfServiceSection']; // Updated sections array
         const backBtn = document.getElementById('backBtn');
         
         // AdSense related elements - kept for displaying ads
@@ -651,10 +753,6 @@
         const pdfResults = document.getElementById('pdfResults');
         const pdfResultsList = document.getElementById('pdfResultsList');
 
-        // Note: Loading and Message modals' DOM elements and functions are removed.
-        // Replaced with console logs or direct actions where necessary for simplicity
-        // in this free version without external dependencies for alerts/loading.
-
 
         // --- Core UI Functions ---
         function showSection(sectionId) {
@@ -681,9 +779,6 @@
                 chartInitialized = true;
             }
         }
-
-        // Removed showLoading, hideLoading, showMessage functions.
-        // For a more robust app, you'd implement custom modals or toast messages.
 
         // --- Chart Initialization (for Home Section) ---
         function initializeCompressionChart() {
@@ -835,7 +930,13 @@
                 return;
             }
 
-            // No free user limits anymore, all files can be processed.
+            // All PDF features (including 'extreme', 'high' quality, 'archive') are now enabled by default.
+            pdfCompressionLevel.querySelector('option[value="extreme"]').disabled = false;
+            pdfImageQuality.querySelector('option[value="high"]').disabled = false;
+            pdfOptimization.querySelector('option[value="archive"]').disabled = false;
+            pdfRemoveMetadata.disabled = false;
+            pdfLinearize.disabled = false;
+
             pdfControls.classList.remove('hidden');
             pdfResults.classList.add('hidden'); // Hide previous results
             pdfResultsList.innerHTML = ''; // Clear previous results
@@ -968,7 +1069,7 @@
         // --- Initial Load ---
         document.addEventListener('DOMContentLoaded', () => {
             showSection('homeSection'); // Show home section on load
-            // No Pro status to update, all features are free.
+            // All features are free, no Pro status to manage.
 
             // Initialize AdSense
             (adsbygoogle = window.adsbygoogle || []).push({});
@@ -980,6 +1081,7 @@
     </script>
 </body>
 </html>
+
 
 
 
