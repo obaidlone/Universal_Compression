@@ -351,7 +351,7 @@
             </div>
 
             <!-- Subscription Plans -->
-            <div class="bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl p-8 text-white mb-12">
+            <div id="subscriptionPlansSection" class="bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl p-8 text-white mb-12 hidden">
                 <div class="text-center mb-8">
                     <h3 class="text-3xl font-bold mb-4">Choose Your Plan</h3>
                     <p class="text-lg opacity-90">Unlock unlimited compression power</p>
@@ -616,7 +616,7 @@
                     <ul class="space-y-2">
                         <li><strong>Optimize Embedded Images:</strong> Crucial for PDF size reduction, especially for documents with many images.</li>
                         <li><strong>Remove Metadata:</strong> Essential for privacy and further size reduction (Pro feature).</li>
-                        <li><strong>Linearize for Web:</strong> Allows PDFs to open quickly in web browsers, displaying the first page while the rest loads (Pro feature).</li>
+                        <li><strong>Linearize for Web:</b> Allows PDFs to open quickly in web browsers, displaying the first page while the rest loads (Pro feature).</li>
                     </ul>
                 </div>
             </div>
@@ -725,6 +725,7 @@
         const subscribeBtn = document.getElementById('subscribeBtn');
         const upgradeBtn = document.getElementById('upgradeBtn');
         const premiumBadge = document.getElementById('premiumBadge');
+        const subscriptionPlansSection = document.getElementById('subscriptionPlansSection'); // New: Reference to the subscription section
 
         // AdSense related elements
         const topAdSpace = document.getElementById('topAdSpace');
@@ -833,8 +834,14 @@
 
             if (sectionId !== 'homeSection') {
                 backBtn.classList.remove('hidden');
+                // Ensure subscription section is hidden when navigating away from home
+                subscriptionPlansSection.classList.add('hidden'); 
             } else {
                 backBtn.classList.add('hidden');
+                // Keep subscription section hidden on initial home load
+                if (!subscriptionPlansSection.classList.contains('hidden')) {
+                     subscriptionPlansSection.classList.add('hidden');
+                }
             }
 
             // Initialize chart only when home section is shown
@@ -1117,7 +1124,10 @@
         // --- Payment Modal Logic ---
         subscribeBtn.addEventListener('click', () => {
             if (!isProUser) {
-                paymentModal.classList.remove('hidden');
+                // Show home section first, then reveal subscription plans and scroll to them
+                showSection('homeSection');
+                subscriptionPlansSection.classList.remove('hidden');
+                subscriptionPlansSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         });
 
@@ -1212,4 +1222,5 @@
     </script>
 </body>
 </html>
+
 
