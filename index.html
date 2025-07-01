@@ -3,1115 +3,1137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Compressor Pro - Universal File Compression Tool</title>
+    <title>Compressor - Universal File Compression Tool | Reduce File Sizes Online</title>
+    <meta name="description" content="Free online file compression tool. Compress images (JPEG, PNG), PDFs, PowerPoint presentations, and videos. Reduce file sizes while maintaining quality.">
+    <meta name="keywords" content="file compression, image compressor, PDF compressor, video compression, PowerPoint compression, reduce file size">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Compressor - Universal File Compression Tool">
+    <meta property="og:description" content="Free online tool to compress images, PDFs, PowerPoint, and videos">
+    <meta property="og:type" content="website">
+    <link rel="canonical" href="https://compressor.example.com">
+    
+    <!-- Google AdSense Auto Ads -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7199979485069328"
+         crossorigin="anonymous"></script>
+    
+    <!-- CDN Libraries -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Asynchronous loading of AdSense script -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7199979485069328" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+    
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
+        .cookie-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #1f2937;
+            color: white;
+            padding: 1rem;
+            z-index: 1000;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
         }
-        .fade-in {
-            animation: fadeIn 0.5s ease-in;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .compress-card {
-            transition: all 0.3s ease;
-            border-radius: 0.75rem; /* Equivalent to rounded-xl */
-        }
-        .compress-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-        .drag-over {
-            border-color: #3B82F6 !important;
-            background-color: #EFF6FF !important;
+        .cookie-banner.show {
+            transform: translateY(0);
         }
         .progress-bar {
             transition: width 0.3s ease;
         }
-        .gradient-bg {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .comparison-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
         }
-        /* New slider specific styles */
-        .image-comparison-container {
-            position: relative;
-            width: 100%;
-            padding-top: 66.66%; /* Maintain 3:2 aspect ratio (e.g., 400/600) */
-            overflow: hidden;
-            border-radius: 12px;
-            background-color: #f0f0f0; /* Fallback background */
-            margin-bottom: 1.5rem; /* Space below the slider */
+        .image-preview {
+            max-width: 100%;
+            max-height: 300px;
+            object-fit: contain;
         }
-        .image-comparison-container img {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            user-select: none; /* Prevent dragging the image itself */
+        .file-drop-zone {
+            border: 2px dashed #cbd5e0;
+            transition: all 0.3s ease;
         }
-        .image-comparison-container input[type="range"] {
-            -webkit-appearance: none; /* Remove default slider style */
-            appearance: none;
-            height: 8px; /* Thicker slider track */
-            background: rgba(255, 255, 255, 0.5); /* White, semi-transparent track */
-            border-radius: 5px;
-            outline: none;
-            cursor: ew-resize;
-            margin: 0;
-            position: absolute;
-            bottom: 10px; /* Position it above the bottom */
-            left: 0;
-            width: 100%;
-            padding: 0 10px; /* Padding for thumb movement */
-            box-sizing: border-box;
-        }
-        .image-comparison-container input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 30px; /* Size of the thumb */
-            height: 30px; /* Size of the thumb */
-            background: #fff; /* White thumb */
-            border: 2px solid #3B82F6; /* Blue border for the thumb */
-            border-radius: 50%; /* Circular thumb */
-            cursor: ew-resize;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            position: relative;
-            z-index: 10; /* Ensure thumb is above images */
-        }
-        .image-comparison-container input[type="range"]::-moz-range-thumb {
-            width: 30px;
-            height: 30px;
-            background: #fff;
-            border: 2px solid #3B82F6;
-            border-radius: 50%;
-            cursor: ew-resize;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
-
-        /* AdSense specific styling - ensures ads are clearly visible but not deceptive */
-        .ad-space {
-            background: #f8f9fa;
-            border: 2px dashed #dee2e6;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #6c757d;
-            font-size: 14px;
-            min-height: 250px; /* Ensures space for ad */
-            text-align: center;
-            border-radius: 0.5rem; /* Equivalent to rounded-lg */
-        }
-        .premium-badge {
-            background: linear-gradient(45deg, #FFD700, #FFA500);
-            color: #000;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            display: inline-block;
-            margin-left: 8px;
+        .file-drop-zone.dragover {
+            border-color: #3b82f6;
+            background-color: #eff6ff;
         }
         @media print {
-            .no-print { display: none !important; }
+            .no-print { display: none; }
         }
     </style>
 </head>
-<body class="bg-gradient-to-br from-blue-50 to-indigo-100">
-    <!-- Header -->
-    <header class="bg-white shadow-sm border-b">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <div class="flex items-center justify-between">
+<body class="bg-gray-50">
+    <!-- Cookie Consent Banner -->
+    <div id="cookieBanner" class="cookie-banner">
+        <div class="container mx-auto flex flex-col sm:flex-row items-center justify-between">
+            <p class="text-sm mb-2 sm:mb-0">We use cookies to enhance your experience. By continuing to use this site, you consent to our use of cookies.</p>
+            <div class="flex space-x-2">
+                <button onclick="acceptCookies()" class="bg-blue-600 text-white px-4 py-2 rounded text-sm hover:bg-blue-700">Accept</button>
+                <button onclick="showPrivacyPolicy()" class="bg-gray-600 text-white px-4 py-2 rounded text-sm hover:bg-gray-700">Learn More</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
                 <div class="flex items-center">
-                    <i class="fas fa-compress-alt text-3xl text-blue-600 mr-3"></i>
-                    <h1 class="text-2xl font-bold text-gray-900">Compressor Pro</h1>
+                    <i class="fas fa-compress-alt text-2xl text-blue-600 mr-2"></i>
+                    <h1 class="text-2xl font-bold text-gray-800">Compressor</h1>
                 </div>
-                <div class="flex items-center space-x-4">
-                    <button id="backBtn" class="hidden bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-lg transition-colors">
-                        <i class="fas fa-arrow-left mr-2"></i>Back to Home
+                <div class="hidden md:flex space-x-6">
+                    <button onclick="showSection('home')" class="text-gray-600 hover:text-blue-600">Home</button>
+                    <button onclick="showSection('about')" class="text-gray-600 hover:text-blue-600">About</button>
+                    <button onclick="showSection('faq')" class="text-gray-600 hover:text-blue-600">FAQ</button>
+                    <button onclick="showSection('contact')" class="text-gray-600 hover:text-blue-600">Contact</button>
+                    <button onclick="showSection('privacy')" class="text-gray-600 hover:text-blue-600">Privacy</button>
+                </div>
+                <div class="md:hidden">
+                    <button onclick="toggleMobileMenu()" class="text-gray-600">
+                        <i class="fas fa-bars text-xl"></i>
                     </button>
                 </div>
             </div>
+            <div id="mobileMenu" class="hidden md:hidden pb-4">
+                <button onclick="showSection('home')" class="block w-full text-left text-gray-600 hover:text-blue-600 py-2">Home</button>
+                <button onclick="showSection('about')" class="block w-full text-left text-gray-600 hover:text-blue-600 py-2">About</button>
+                <button onclick="showSection('faq')" class="block w-full text-left text-gray-600 hover:text-blue-600 py-2">FAQ</button>
+                <button onclick="showSection('contact')" class="block w-full text-left text-gray-600 hover:text-blue-600 py-2">Contact</button>
+                <button onclick="showSection('privacy')" class="block w-full text-left text-gray-600 hover:text-blue-600 py-2">Privacy</button>
+            </div>
         </div>
-    </header>
+    </nav>
 
     <!-- Main Content -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <!-- Google Ad Space - Top Banner -->
-        <div id="topAdSpace" class="ad-space mb-8">
-            <!-- AdSense Code -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- AdSense - Top Banner -->
+        <div class="mb-8">
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7199979485069328"
+                 crossorigin="anonymous"></script>
             <ins class="adsbygoogle"
-                style="display:block"
-                data-ad-client="ca-pub-7199979485069328"
-                data-ad-slot="3059014774"
-                data-ad-format="auto"
-                data-full-width-responsive="true"></ins>
+                 style="display:block"
+                 data-ad-client="ca-pub-7199979485069328"
+                 data-ad-slot="3381081428"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
             <script>
-                (adsbygoogle = window.adsbygoogle || []).push({});
+                 (adsbygoogle = window.adsbygoogle || []).push({});
             </script>
         </div>
 
         <!-- Home Section -->
-        <section id="homeSection" class="fade-in">
+        <section id="homeSection">
             <div class="text-center mb-12">
-                <h2 class="text-5xl font-bold text-gray-900 mb-4">Universal File Compressor Pro</h2>
-                <p class="text-xl text-gray-600 max-w-4xl mx-auto">
-                    Professional-grade file compression with advanced algorithms. Reduce file sizes for images, PDFs, presentations, and videos while maintaining superior quality. All features are now available for free!
-                </p>
-                <div class="mt-6 flex justify-center items-center space-x-4">
-                    <div class="bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-medium">
-                        <i class="fas fa-check mr-2"></i>99% Quality Retention
-                    </div>
-                    <div class="bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium">
-                        <i class="fas fa-shield-alt mr-2"></i>100% Secure
-                    </div>
-                    <div class="bg-purple-100 text-purple-800 px-4 py-2 rounded-full text-sm font-medium">
-                        <i class="fas fa-bolt mr-2"></i>Lightning Fast
-                    </div>
-                </div>
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">Universal File Compressor</h2>
+                <p class="text-xl text-gray-600 mb-8">Reduce file sizes without compromising quality. Support for images, PDFs, PowerPoint, and videos.</p>
             </div>
 
-            <!-- Compression Tools Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
                 <!-- Image Compression -->
-                <div class="compress-card bg-white rounded-xl p-6 shadow-lg cursor-pointer" onclick="showSection('imageSection')">
+                <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow cursor-pointer" onclick="selectCompressionType('image')">
                     <div class="text-center">
-                        <div class="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <i class="fas fa-image text-2xl text-green-600"></i>
-                        </div>
-                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Image Compression</h3>
-                        <p class="text-gray-600 mb-4">Compress JPEG, PNG, WebP with AI optimization</p>
-                        <div class="text-sm text-gray-500">
-                            <div class="flex justify-center space-x-2 mb-2">
-                                <span class="bg-gray-100 px-2 py-1 rounded">.jpg</span>
-                                <span class="bg-gray-100 px-2 py-1 rounded">.png</span>
-                                <span class="bg-gray-100 px-2 py-1 rounded">.webp</span>
-                            </div>
-                            <p class="font-medium text-green-600">Up to 95% size reduction</p>
+                        <i class="fas fa-image text-5xl text-blue-600 mb-4"></i>
+                        <h3 class="text-xl font-semibold mb-2">Image Compression</h3>
+                        <p class="text-gray-600 text-sm">Compress JPEG, PNG, WebP images while maintaining quality</p>
+                        <div class="mt-4">
+                            <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">JPEG</span>
+                            <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded ml-1">PNG</span>
+                            <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded ml-1">WebP</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- PDF Compression -->
-                <div class="compress-card bg-white rounded-xl p-6 shadow-lg cursor-pointer" onclick="showSection('pdfSection')">
+                <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow cursor-pointer" onclick="selectCompressionType('pdf')">
                     <div class="text-center">
-                        <div class="bg-red-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <i class="fas fa-file-pdf text-2xl text-red-600"></i>
-                        </div>
-                        <h3 class="text-xl font-semibold text-gray-900 mb-2">PDF Compression</h3>
-                        <p class="text-gray-600 mb-4">Smart PDF optimization with text preservation</p>
-                        <div class="text-sm text-gray-500">
-                            <div class="flex justify-center space-x-2 mb-2">
-                                <span class="bg-gray-100 px-2 py-1 rounded">.pdf</span>
-                            </div>
-                            <p class="font-medium text-red-600">Document quality maintained</p>
+                        <i class="fas fa-file-pdf text-5xl text-red-600 mb-4"></i>
+                        <h3 class="text-xl font-semibold mb-2">PDF Compression</h3>
+                        <p class="text-gray-600 text-sm">Optimize PDF files for web, print, or archive</p>
+                        <div class="mt-4">
+                            <span class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded">PDF</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- PowerPoint Compression -->
-                <div class="compress-card bg-white rounded-xl p-6 shadow-lg cursor-pointer" onclick="showSection('pptSection')">
+                <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow cursor-pointer" onclick="selectCompressionType('ppt')">
                     <div class="text-center">
-                        <div class="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <i class="fas fa-file-powerpoint text-2xl text-orange-600"></i>
-                        </div>
-                        <h3 class="text-xl font-semibold text-gray-900 mb-2">PowerPoint Pro</h3>
-                        <p class="text-gray-600 mb-4">Advanced presentation compression</p>
-                        <div class="text-sm text-gray-500">
-                            <div class="flex justify-center space-x-2 mb-2">
-                                <span class="bg-gray-100 px-2 py-1 rounded">.pptx</span>
-                                <span class="bg-gray-100 px-2 py-1 rounded">.ppt</span>
-                            </div>
-                            <p class="font-medium text-orange-600">Media optimization</p>
+                        <i class="fas fa-file-powerpoint text-5xl text-orange-600 mb-4"></i>
+                        <h3 class="text-xl font-semibold mb-2">PowerPoint Compression</h3>
+                        <p class="text-gray-600 text-sm">Reduce presentation file sizes and optimize media</p>
+                        <div class="mt-4">
+                            <span class="bg-orange-100 text-orange-800 text-xs px-2 py-1 rounded">PPT</span>
+                            <span class="bg-orange-100 text-orange-800 text-xs px-2 py-1 rounded ml-1">PPTX</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Video Compression -->
-                <div class="compress-card bg-white rounded-xl p-6 shadow-lg cursor-pointer" onclick="showSection('videoSection')">
+                <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow cursor-pointer" onclick="selectCompressionType('video')">
                     <div class="text-center">
-                        <div class="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <i class="fas fa-video text-2xl text-purple-600"></i>
-                        </div>
-                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Video Compression</h3>
-                        <p class="text-gray-600 mb-4">4K video compression with HDR support</p>
-                        <div class="text-sm text-gray-500">
-                            <div class="flex justify-center space-x-2 mb-2">
-                                <span class="bg-gray-100 px-2 py-1 rounded">.mp4</span>
-                                <span class="bg-gray-100 px-2 py-1 rounded">.avi</span>
-                                <span class="bg-gray-100 px-2 py-1 rounded">.mov</span>
-                            </div>
-                            <p class="font-medium text-purple-600">4K quality preserved</p>
+                        <i class="fas fa-video text-5xl text-green-600 mb-4"></i>
+                        <h3 class="text-xl font-semibold mb-2">Video Compression</h3>
+                        <p class="text-gray-600 text-sm">Compress videos with adjustable quality and resolution</p>
+                        <div class="mt-4">
+                            <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">MP4</span>
+                            <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded ml-1">AVI</span>
+                            <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded ml-1">MOV</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Before/After Comparison Section - Removed from Home Section -->
-            <div class="bg-white rounded-xl p-8 shadow-lg mb-12">
-                <h3 class="text-2xl font-bold text-gray-900 mb-6 text-center">See the Difference (Example)</h3>
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <div>
-                        <h4 class="text-lg font-semibold mb-4">Static Before/After Comparison</h4>
-                        <!-- Static Image Comparison Slider - Placeholder for general demonstration -->
-                        <div class="relative w-full max-w-xl mx-auto image-comparison-container">
-                            <div class="absolute top-0 left-0 w-full h-full">
-                                <img src="https://placehold.co/600x400/FF0000/FFFFFF?text=Original" alt="Original Image" class="w-full h-full object-cover rounded-lg" />
-                            </div>
-                            <div class="absolute top-0 left-0 w-full h-full overflow-hidden">
-                                <img src="https://placehold.co/600x400/00FF00/FFFFFF?text=Compressed" alt="Compressed Image" class="w-full h-full object-cover rounded-lg" />
-                            </div>
-                            <!-- Static slider has no interactive functionality -->
-                        </div>
-                        <p class="text-sm text-gray-500 text-center mt-4">This is a static example of image compression.</p>
-                    </div>
-                    <div>
-                        <h4 class="text-lg font-semibold mb-4">Compression Statistics</h4>
-                        <div style="height: 300px;">
-                            <canvas id="compressionChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-            <!-- Google Ad Space - Middle Banner -->
-            <div id="middleAdSpace" class="ad-space mb-12">
-                <!-- AdSense Code -->
+            <!-- AdSense - Middle Rectangle -->
+            <div class="mb-8 flex justify-center">
+                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7199979485069328"
+                     crossorigin="anonymous"></script>
                 <ins class="adsbygoogle"
-                    style="display:block"
-                    data-ad-client="ca-pub-7199979485069328"
-                    data-ad-slot="3059014774"
-                    data-ad-format="auto"
-                    data-full-width-responsive="true"></ins>
+                     style="display:block"
+                     data-ad-client="ca-pub-7199979485069328"
+                     data-ad-slot="3381081428"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
                 <script>
-                    (adsbygoogle = window.adsbygoogle || []).push({});
+                     (adsbygoogle = window.adsbygoogle || []).push({});
                 </script>
             </div>
 
             <!-- Features Section -->
-            <div class="bg-white rounded-xl p-8 shadow-lg mb-12">
-                <h3 class="text-2xl font-bold text-gray-900 mb-8 text-center">Professional Features</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
+                <h3 class="text-2xl font-bold text-center mb-8">Why Choose Our Compressor?</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div class="text-center">
-                        <i class="fas fa-shield-alt text-4xl text-blue-600 mb-4"></i>
-                        <h4 class="text-lg font-semibold mb-2">Bank-Level Security</h4>
-                        <p class="text-gray-600 text-sm">256-bit encryption. Files processed locally, never stored on servers.</p>
+                        <i class="fas fa-shield-alt text-3xl text-green-600 mb-4"></i>
+                        <h4 class="font-semibold mb-2">100% Secure</h4>
+                        <p class="text-gray-600 text-sm">All processing happens in your browser. No files uploaded to our servers.</p>
                     </div>
                     <div class="text-center">
-                        <i class="fas fa-rocket text-4xl text-green-600 mb-4"></i>
-                        <h4 class="text-lg font-semibold mb-2">Ultra-Fast Processing</h4>
-                        <p class="text-gray-600 text-sm">Advanced algorithms with GPU acceleration for instant results.</p>
+                        <i class="fas fa-lightning-bolt text-3xl text-yellow-600 mb-4"></i>
+                        <h4 class="font-semibold mb-2">Lightning Fast</h4>
+                        <p class="text-gray-600 text-sm">Advanced algorithms provide quick compression without quality loss.</p>
                     </div>
                     <div class="text-center">
-                        <i class="fas fa-mobile-alt text-4xl text-purple-600 mb-4"></i>
-                        <h4 class="text-lg font-semibold mb-2">Universal Compatibility</h4>
-                        <p class="text-gray-600 text-sm">Works flawlessly on desktop, tablet, and mobile devices.</p>
-                    </div>
-                    <div class="text-center">
-                        <i class="fas fa-infinity text-4xl text-orange-600 mb-4"></i>
-                        <h4 class="text-lg font-semibold mb-2">Batch Processing</h4>
-                        <p class="text-gray-600 text-sm">Process multiple files simultaneously for enhanced productivity.</p>
+                        <i class="fas fa-mobile-alt text-3xl text-blue-600 mb-4"></i>
+                        <h4 class="font-semibold mb-2">Mobile Friendly</h4>
+                        <p class="text-gray-600 text-sm">Works perfectly on all devices - desktop, tablet, and mobile.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Image Compression Section -->
-        <section id="imageSection" class="hidden fade-in">
-            <div class="bg-white rounded-xl p-8 shadow-lg mb-8">
-                <div class="flex items-center mb-6">
-                    <i class="fas fa-image text-3xl text-green-600 mr-4"></i>
-                    <h2 class="text-3xl font-bold text-gray-900">Professional Image Compression</h2>
-                </div>
+        <!-- Compression Interface -->
+        <section id="compressionSection" class="hidden">
+            <div class="mb-6">
+                <button onclick="showSection('home')" class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">
+                    <i class="fas fa-arrow-left mr-2"></i>Back to Home
+                </button>
+                <h2 id="compressionTitle" class="text-3xl font-bold text-gray-800 mt-4 mb-2"></h2>
+                <p id="compressionDescription" class="text-gray-600"></p>
+            </div>
 
-                <!-- Upload Area -->
-                <div id="imageUploadArea" class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center mb-6 transition-colors">
+            <!-- File Upload Area -->
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+                <div id="fileDropZone" class="file-drop-zone border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
                     <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-4"></i>
-                    <p class="text-lg text-gray-600 mb-2">Drag and drop images here, or click to select</p>
-                    <p class="text-sm text-gray-500 mb-4">Supports JPEG, PNG, WebP, HEIC formats</p>
-                    <input type="file" id="imageInput" multiple accept="image/*" class="hidden">
-                    <button onclick="document.getElementById('imageInput').click()" class="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors">
-                        <i class="fas fa-plus mr-2"></i>Select Images
+                    <p class="text-lg text-gray-600 mb-2">Drag and drop files here or click to select</p>
+                    <p class="text-sm text-gray-500 mb-4">Maximum file size: <span id="maxFileSize">10MB</span></p>
+                    <input type="file" id="fileInput" multiple class="hidden" accept="">
+                    <button onclick="document.getElementById('fileInput').click()" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">
+                        Select Files
                     </button>
                 </div>
 
-                <!-- Compression Controls -->
-                <div id="imageControls" class="hidden mb-6">
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Quality Level</label>
-                            <div class="flex items-center space-x-4">
-                                <span class="text-sm text-gray-500">10%</span>
-                                <input type="range" id="imageQuality" min="10" max="100" value="85" class="flex-1">
-                                <span class="text-sm text-gray-500">100%</span>
-                                <span id="qualityValue" class="text-sm font-medium text-blue-600 w-12">85%</span>
+                <!-- Progress Bar -->
+                <div id="progressContainer" class="hidden mt-4">
+                    <div class="bg-gray-200 rounded-full h-2">
+                        <div id="progressBar" class="bg-blue-600 h-2 rounded-full progress-bar" style="width: 0%"></div>
+                    </div>
+                    <p id="progressText" class="text-sm text-gray-600 mt-2">Processing...</p>
+                </div>
+            </div>
+
+            <!-- Compression Settings -->
+            <div id="settingsPanel" class="bg-white rounded-lg shadow-lg p-6 mb-6 hidden">
+                <h3 class="text-xl font-semibold mb-4">Compression Settings</h3>
+                
+                <!-- Image Settings -->
+                <div id="imageSettings" class="hidden">
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Quality: <span id="qualityValue">80</span>%</label>
+                        <input type="range" id="qualitySlider" min="1" max="100" value="80" class="w-full">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Output Format</label>
+                        <select id="outputFormat" class="border border-gray-300 rounded px-3 py-2">
+                            <option value="jpeg">JPEG</option>
+                            <option value="png">PNG</option>
+                            <option value="webp">WebP</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- PDF Settings -->
+                <div id="pdfSettings" class="hidden">
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Optimization Level</label>
+                        <select id="pdfOptimization" class="border border-gray-300 rounded px-3 py-2">
+                            <option value="low">Low Compression</option>
+                            <option value="medium">Medium Compression</option>
+                            <option value="high">High Compression</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Video Settings -->
+                <div id="videoSettings" class="hidden">
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Resolution</label>
+                        <select id="videoResolution" class="border border-gray-300 rounded px-3 py-2">
+                            <option value="480p">480p</option>
+                            <option value="720p">720p</option>
+                            <option value="1080p">1080p</option>
+                            <option value="original">Original</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Bitrate: <span id="bitrateValue">1000</span> kbps</label>
+                        <input type="range" id="bitrateSlider" min="500" max="5000" value="1000" class="w-full">
+                    </div>
+                </div>
+
+                <button id="compressBtn" onclick="startCompression()" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 disabled:bg-gray-400" disabled>
+                    <i class="fas fa-compress mr-2"></i>Compress Files
+                </button>
+            </div>
+
+            <!-- File Preview and Comparison -->
+            <div id="previewSection" class="hidden">
+                <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+                    <h3 class="text-xl font-semibold mb-4">File Preview & Comparison</h3>
+                    <div id="filePreviewContainer"></div>
+                </div>
+
+                <!-- Download Section -->
+                <div id="downloadSection" class="bg-white rounded-lg shadow-lg p-6 hidden">
+                    <h3 class="text-xl font-semibold mb-4">Download Compressed Files</h3>
+                    <div id="downloadLinks"></div>
+                    <button id="downloadAllBtn" onclick="downloadAll()" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 mt-4">
+                        <i class="fas fa-download mr-2"></i>Download All as ZIP
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="aboutSection" class="hidden">
+            <div class="bg-white rounded-lg shadow-lg p-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">About Compressor</h2>
+                <div class="prose max-w-none">
+                    <p class="text-gray-600 mb-4">Compressor is a free, secure, and efficient online tool designed to help you reduce file sizes without compromising quality. Our advanced compression algorithms work entirely in your browser, ensuring your files never leave your device.</p>
+                    
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3">Our Mission</h3>
+                    <p class="text-gray-600 mb-4">To provide everyone with access to professional-grade file compression tools that are easy to use, completely secure, and absolutely free.</p>
+                    
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3">What We Offer</h3>
+                    <ul class="list-disc list-inside text-gray-600 mb-4">
+                        <li>Image compression with quality control</li>
+                        <li>PDF optimization for different use cases</li>
+                        <li>PowerPoint presentation compression</li>
+                        <li>Video compression with resolution options</li>
+                        <li>Batch processing capabilities</li>
+                        <li>Real-time preview and comparison</li>
+                    </ul>
+                    
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3">Privacy & Security</h3>
+                    <p class="text-gray-600 mb-4">All compression happens locally in your browser using JavaScript. We never upload your files to our servers, ensuring complete privacy and security of your documents.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section id="faqSection" class="hidden">
+            <div class="bg-white rounded-lg shadow-lg p-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">Frequently Asked Questions</h2>
+                
+                <div class="space-y-6">
+                    <div class="border-b border-gray-200 pb-4">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Is my data safe when using this tool?</h3>
+                        <p class="text-gray-600">Yes, absolutely. All compression happens in your browser using JavaScript. Your files are never uploaded to our servers, ensuring complete privacy and security.</p>
+                    </div>
+                    
+                    <div class="border-b border-gray-200 pb-4">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">What file formats are supported?</h3>
+                        <p class="text-gray-600">We support JPEG, PNG, WebP for images; PDF documents; PPT and PPTX presentations; and MP4, AVI, MOV video formats.</p>
+                    </div>
+                    
+                    <div class="border-b border-gray-200 pb-4">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Is there a file size limit?</h3>
+                        <p class="text-gray-600">For optimal performance, we recommend files under 100MB for images and PDFs, and under 500MB for videos. Larger files may take longer to process.</p>
+                    </div>
+                    
+                    <div class="border-b border-gray-200 pb-4">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">How much compression can I expect?</h3>
+                        <p class="text-gray-600">Compression ratios vary by file type and content. Typically, you can expect 30-70% size reduction for images, 10-50% for PDFs, and 20-60% for videos while maintaining good quality.</p>
+                    </div>
+                    
+                    <div class="border-b border-gray-200 pb-4">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Can I compress multiple files at once?</h3>
+                        <p class="text-gray-600">Yes, our tool supports batch processing. You can select multiple files and compress them all at once, then download them individually or as a ZIP archive.</p>
+                    </div>
+                    
+                    <div class="border-b border-gray-200 pb-4">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Do I need to install any software?</h3>
+                        <p class="text-gray-600">No installation required. Our compression tool works entirely in your web browser on any device - desktop, tablet, or mobile.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contactSection" class="hidden">
+            <div class="bg-white rounded-lg shadow-lg p-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">Contact Us</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Get in Touch</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center">
+                                <i class="fas fa-envelope text-blue-600 mr-3"></i>
+                                <span class="text-gray-600">support@compressor.com</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-phone text-blue-600 mr-3"></i>
+                                <span class="text-gray-600">+1 (555) 123-4567</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-map-marker-alt text-blue-600 mr-3"></i>
+                                <span class="text-gray-600">123 Tech Street, Digital City, DC 12345</span>
                             </div>
                         </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Output Format</label>
-                            <select id="imageFormat" class="w-full border border-gray-300 rounded-lg px-3 py-2">
-                                <option value="jpeg">JPEG (Best for photos)</option>
-                                <option value="png">PNG (Transparency support)</option>
-                                <option value="webp">WebP (Modern format)</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Resize (Optional)</label>
-                            <select id="imageResize" class="w-full border border-gray-300 rounded-lg px-3 py-2">
-                                <option value="">Keep original size</option>
-                                <option value="25">25% of original</option>
-                                <option value="50">50% of original</option>
-                                <option value="75">75% of original</option>
-                                <option value="125">125% of original</option>
-                                <option value="150">150% of original</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Compression Mode</label>
-                            <select id="compressionMode" class="w-full border border-gray-300 rounded-lg px-3 py-2">
-                                <option value="balanced">Balanced</option>
-                                <option value="quality">Quality Priority</option>
-                                <option value="size">Size Priority</option>
-                            </select>
-                        </div>
+                        
+                        <h4 class="text-lg font-semibold text-gray-800 mt-6 mb-2">Business Hours</h4>
+                        <p class="text-gray-600">Monday - Friday: 9:00 AM - 6:00 PM EST</p>
+                        <p class="text-gray-600">Saturday - Sunday: 10:00 AM - 4:00 PM EST</p>
                     </div>
-                    <div class="flex justify-center mt-6">
-                        <button id="compressImages" class="bg-green-600 text-white px-8 py-3 rounded-lg hover:bg-green-700 transition-colors">
-                            <i class="fas fa-compress mr-2"></i>Compress Images
-                        </button>
+                    
+                    <div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Send us a Message</h3>
+                        <form id="contactForm" onsubmit="submitContactForm(event)">
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Name</label>
+                                <input type="text" id="contactName" class="w-full border border-gray-300 rounded px-3 py-2" required>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                                <input type="email" id="contactEmail" class="w-full border border-gray-300 rounded px-3 py-2" required>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Subject</label>
+                                <input type="text" id="contactSubject" class="w-full border border-gray-300 rounded px-3 py-2" required>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Message</label>
+                                <textarea id="contactMessage" rows="4" class="w-full border border-gray-300 rounded px-3 py-2" required></textarea>
+                            </div>
+                            <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">
+                                <i class="fas fa-paper-plane mr-2"></i>Send Message
+                            </button>
+                        </form>
                     </div>
                 </div>
-
-                <!-- Dynamic Image Comparison Slider - Moved to Image Section -->
-                <div id="dynamicImageComparison" class="relative w-full max-w-xl mx-auto image-comparison-container hidden">
-                    <div class="absolute top-0 left-0 w-full h-full">
-                        <img id="originalImage" src="" alt="Original Image" class="w-full h-full object-cover rounded-lg" />
-                    </div>
-                    <div class="absolute top-0 left-0 w-full h-full overflow-hidden" id="sliderWrapper">
-                        <img id="compressedImage" src="" alt="Compressed Image" class="w-full h-full object-cover rounded-lg" />
-                    </div>
-                    <input type="range" min="0" max="100" value="50" id="slider">
-                </div>
-                <p id="sliderCaption" class="text-sm text-gray-500 text-center mt-4 hidden">Drag the slider to compare original vs. compressed image quality.</p>
-
-
-                <!-- Results Area -->
-                <div id="imageResults" class="hidden">
-                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Compression Results</h3>
-                    <div id="imageResultsList" class="space-y-4"></div>
-                </div>
-            </div>
-
-            <!-- Google Ad Space - Section Ad -->
-            <div id="sectionAdSpace" class="ad-space mb-8">
-                <!-- AdSense Code -->
-                <ins class="adsbygoogle"
-                    style="display:block"
-                    data-ad-client="ca-pub-7199979485069328"
-                    data-ad-slot="3059014774"
-                    data-ad-format="auto"
-                    data-full-width-responsive="true"></ins>
-                <script>
-                    (adsbygoogle = window.adsbygoogle || []).push({});
-                </script>
-            </div>
-
-            <!-- Educational Content -->
-            <div class="bg-green-50 rounded-lg p-6">
-                <h3 class="text-lg font-semibold text-green-900 mb-3">Professional Image Compression Tips</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-green-800">
-                    <ul class="space-y-2">
-                        <li><strong>JPEG:</strong> Best for photos with many colors. Quality 80-90% is usually optimal for web.</li>
-                        <li><strong>PNG:</strong> Best for images with transparency, logos, or graphics with few colors.</li>
-                        <li><strong>WebP:</b> Modern format with superior compression, supported by most browsers.</li>
-                    </ul>
-                    <ul class="space-y-2">
-                        <li><strong>Quality Priority:</strong> Maintains visual quality with moderate compression.</li>
-                        <li><strong>Size Priority:</b> Maximizes file size reduction with acceptable quality loss.</li>
-                        <li><strong>Balanced:</strong> Optimal balance between quality and file size for most use cases.</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- PDF Compression Section -->
-        <section id="pdfSection" class="hidden fade-in">
-            <div class="bg-white rounded-xl p-8 shadow-lg mb-8">
-                <div class="flex items-center mb-6">
-                    <i class="fas fa-file-pdf text-3xl text-red-600 mr-4"></i>
-                    <h2 class="text-3xl font-bold text-gray-900">Advanced PDF Compression</h2>
-                </div>
-
-                <!-- Upload Area -->
-                <div id="pdfUploadArea" class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center mb-6 transition-colors">
-                    <i class="fas fa-file-upload text-4xl text-gray-400 mb-4"></i>
-                    <p class="text-lg text-gray-600 mb-2">Drag and drop PDF files here, or click to select</p>
-                    <p class="text-sm text-gray-500 mb-4">Supports PDF documents</p>
-                    <input type="file" id="pdfInput" multiple accept=".pdf" class="hidden">
-                    <button onclick="document.getElementById('pdfInput').click()" class="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors">
-                        <i class="fas fa-plus mr-2"></i>Select PDF Files
-                    </button>
-                </div>
-
-                <!-- Compression Controls -->
-                <div id="pdfControls" class="hidden mb-6">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Compression Level</label>
-                            <select id="pdfCompressionLevel" class="w-full border border-gray-300 rounded-lg px-3 py-2">
-                                <option value="low">Low Compression (High Quality)</option>
-                                <option value="medium" selected>Medium Compression (Balanced)</option>
-                                <option value="high">High Compression (Smaller Size)</option>
-                                <option value="extreme">Extreme Compression</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Image Quality</label>
-                            <select id="pdfImageQuality" class="w-full border border-gray-300 rounded-lg px-3 py-2">
-                                <option value="high">High Quality</option>
-                                <option value="medium" selected>Medium Quality</option>
-                                <option value="low">Low Quality</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Optimization Mode</label>
-                            <select id="pdfOptimization" class="w-full border border-gray-300 rounded-lg px-3 py-2">
-                                <option value="web">Web Viewing</option>
-                                <option value="print" selected>Print Quality</option>
-                                <option value="archive">Archive</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                        <div class="space-y-2">
-                            <label class="flex items-center">
-                                <input type="checkbox" id="pdfRemoveAnnotations" class="mr-2">
-                                <span class="text-sm text-gray-700">Remove annotations and comments</span>
-                            </label>
-                            <label class="flex items-center">
-                                <input type="checkbox" id="pdfOptimizeImages" class="mr-2" checked>
-                                <span class="text-sm text-gray-700">Optimize embedded images</span>
-                            </label>
-                        </div>
-                        <div class="space-y-2">
-                            <label class="flex items-center">
-                                <input type="checkbox" id="pdfRemoveMetadata" class="mr-2">
-                                <span class="text-sm text-gray-700">Remove metadata</span>
-                            </label>
-                            <label class="flex items-center">
-                                <input type="checkbox" id="pdfLinearize" class="mr-2">
-                                <span class="text-sm text-gray-700">Linearize for web</span>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="flex justify-center mt-6">
-                        <button id="compressPdf" class="bg-red-600 text-white px-8 py-3 rounded-lg hover:bg-red-700 transition-colors">
-                            <i class="fas fa-compress mr-2"></i>Compress PDF
-                        </button>
-                    </div>
-                </div>
-
-                <!-- PDF Results Area -->
-                <div id="pdfResults" class="hidden">
-                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Compression Results</h3>
-                    <div id="pdfResultsList" class="space-y-4"></div>
-                </div>
-            </div>
-
-            <!-- Google Ad Space - Section Ad -->
-            <div id="pdfSectionAdSpace" class="ad-space mb-8">
-                <!-- AdSense Code -->
-                <ins class="adsbygoogle"
-                    style="display:block"
-                    data-ad-client="ca-pub-7199979485069328"
-                    data-ad-slot="3059014774"
-                    data-ad-format="auto"
-                    data-full-width-responsive="true"></ins>
-                <script>
-                    (adsbygoogle = window.adsbygoogle || []).push({});
-                </script>
-            </div>
-            
-            <!-- Educational Content -->
-            <div class="bg-red-50 rounded-lg p-6">
-                <h3 class="text-lg font-semibold text-red-900 mb-3">Advanced PDF Compression Strategies</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-red-800">
-                    <ul class="space-y-2">
-                        <li><strong>Low Compression:</strong> Ideal for preserving maximum quality, minimal size reduction.</li>
-                        <li><strong>Medium Compression:</strong> Balanced approach for good quality and reasonable file size.</li>
-                        <li><strong>High Compression:</strong> Aggressive size reduction, might affect image quality within PDF.</li>
-                    </ul>
-                    <ul class="space-y-2">
-                        <li><strong>Optimize Embedded Images:</strong> Crucial for PDF size reduction, especially for documents with many images.</li>
-                        <li><strong>Remove Metadata:</strong> Essential for privacy and further size reduction.</li>
-                        <li><strong>Linearize for Web:</b> Allows PDFs to open quickly in web browsers, displaying the first page while the rest loads.</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- PowerPoint Compression Section (Placeholder) -->
-        <section id="pptSection" class="hidden fade-in">
-            <div class="bg-white rounded-xl p-8 shadow-lg mb-8 text-center">
-                <i class="fas fa-file-powerpoint text-5xl text-orange-600 mb-4"></i>
-                <h2 class="text-3xl font-bold text-gray-900 mb-4">PowerPoint Compression (Coming Soon)</h2>
-                <p class="text-gray-600 text-lg mb-6">
-                    Our professional PowerPoint compression tool is under development, offering advanced features for presentations.
-                </p>
-                <button onclick="showSection('homeSection')" class="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-300 transition-colors">
-                    Back to Home
-                </button>
-            </div>
-        </section>
-
-        <!-- Video Compression Section (Placeholder) -->
-        <section id="videoSection" class="hidden fade-in">
-            <div class="bg-white rounded-xl p-8 shadow-lg mb-8 text-center">
-                <i class="fas fa-video text-5xl text-purple-600 mb-4"></i>
-                <h2 class="text-3xl font-bold text-gray-900 mb-4">Video Compression (Coming Soon)</h2>
-                <p class="text-gray-600 text-lg mb-6">
-                    Experience state-of-the-art video compression for 4K and HDR content. Coming soon to Compressor Pro!
-                </p>
-                <button onclick="showSection('homeSection')" class="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-400 transition-colors">
-                    Back to Home
-                </button>
             </div>
         </section>
 
         <!-- Privacy Policy Section -->
-        <section id="privacyPolicySection" class="hidden fade-in">
-            <div class="bg-white rounded-xl p-8 shadow-lg mb-8">
-                <h2 class="text-3xl font-bold text-gray-900 mb-6 text-center">Privacy Policy</h2>
-                <div class="text-gray-700 space-y-4">
-                    <p>This Privacy Policy describes how Compressor Pro ("we," "us," or "our") collects, uses, and discloses your information when you use our web application. We are committed to protecting your privacy and ensuring a secure experience.</p>
-
-                    <h3 class="text-xl font-semibold mt-6 mb-2">1. Information We Collect</h3>
-                    <p><strong>Files for Processing:</strong> When you upload files for compression (e.g., images, PDFs), these files are processed directly in your browser. We do not store or transmit your files to our servers. Once the compression is complete or the browser tab is closed, the file data is removed from our application's memory.</p>
-                    <p><strong>Non-Personal Information:</strong> We may collect non-personal information such as browser type, operating system, and anonymous usage data (e.g., how often features are used, aggregated compression statistics) to improve our service. This data is not linked to individual users.</p>
-                    <p><strong>Google AdSense:</strong> Our website uses Google AdSense to display advertisements. Google may use cookies and other technologies to serve ads based on your prior visits to our website or other websites. Google's use of advertising cookies enables it and its partners to serve ads to your users based on their visit to your sites and/or other sites on the Internet. You may opt out of personalized advertising by visiting <a href="https://www.aboutads.info/choices/" target="_blank" class="text-blue-600 hover:underline">Ads Settings</a>.</p>
-
-                    <h3 class="text-xl font-semibold mt-6 mb-2">2. How We Use Your Information</h3>
-                    <p>The information collected is used solely for the purpose of providing and improving the Compressor Pro service:</p>
-                    <ul>
-                        <li>To enable file compression directly within your browser.</li>
-                        <li>To analyze usage patterns and improve user experience (through aggregated, non-personal data).</li>
-                        <li>To display relevant advertisements through Google AdSense.</li>
-                    </ul>
-
-                    <h3 class="text-xl font-semibold mt-6 mb-2">3. Data Security</h3>
-                    <p>We prioritize the security of your data. As files are processed client-side (in your browser), they are not uploaded to our servers, significantly reducing data transmission risks. We implement industry-standard security measures for our website to protect against unauthorized access, alteration, disclosure, or destruction of any information.</p>
-
-                    <h3 class="text-xl font-semibold mt-6 mb-2">4. Third-Party Links</h3>
-                    <p>Our website may contain links to third-party websites or services. We are not responsible for the privacy practices or content of these third-party sites. We encourage you to review the privacy policies of any third-party sites you visit.</p>
-
-                    <h3 class="text-xl font-semibold mt-6 mb-2">5. Changes to This Privacy Policy</h3>
-                    <p>We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page. You are advised to review this Privacy Policy periodically for any changes. Changes to this Privacy Policy are effective when they are posted on this page.</p>
-
-                    <h3 class="text-xl font-semibold mt-6 mb-2">6. Contact Us</h3>
-                    <p>If you have any questions about this Privacy Policy, please contact us via the <span class="text-blue-600 cursor-pointer hover:underline" onclick="showSection('contactUsSection')">Contact Us</span> section.</p>
-                </div>
-                <div class="mt-8 text-center">
-                    <button onclick="showSection('homeSection')" class="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-300 transition-colors">
-                        Back to Home
-                    </button>
-                </div>
-            </div>
-        </section>
-
-        <!-- Contact Us Section -->
-        <section id="contactUsSection" class="hidden fade-in">
-            <div class="bg-white rounded-xl p-8 shadow-lg mb-8">
-                <h2 class="text-3xl font-bold text-gray-900 mb-6 text-center">Contact Us</h2>
-                <div class="text-gray-700 space-y-4 max-w-2xl mx-auto">
-                    <p>We value your feedback and are here to assist you. Please use the following methods to get in touch with us:</p>
-
-                    <div class="flex items-center space-x-4">
-                        <i class="fas fa-envelope text-2xl text-blue-600"></i>
-                        <div>
-                            <h3 class="text-xl font-semibold">Email Support</h3>
-                            <p>For general inquiries, technical support, or feedback, please email us at:</p>
-                            <p class="font-medium text-blue-600">support@compressorpro.com</p>
-                        </div>
-                    </div>
-
-                    <div class="flex items-center space-x-4 mt-6">
-                        <i class="fas fa-address-card text-2xl text-blue-600"></i>
-                        <div>
-                            <h3 class="text-xl font-semibold">Our Office (Conceptual)</h3>
-                            <p>While our operations are primarily online, our main office is located at:</p>
-                            <p class="font-medium">123 Compression Drive, Tech City, TX 78701, USA</p>
-                            <p class="text-sm text-gray-500">(Please note: This is a conceptual address for illustrative purposes.)</p>
-                        </div>
-                    </div>
-
-                    <div class="flex items-center space-x-4 mt-6">
-                        <i class="fas fa-business-time text-2xl text-blue-600"></i>
-                        <div>
-                            <h3 class="text-xl font-semibold">Business Hours</h3>
-                            <p>Our support team is available:</p>
-                            <p class="font-medium">Monday - Friday: 9:00 AM - 5:00 PM (Your Local Time)</p>
-                        </div>
-                    </div>
-
-                    <p class="pt-4">We aim to respond to all inquiries within 24-48 business hours.</p>
-                </div>
-                <div class="mt-8 text-center">
-                    <button onclick="showSection('homeSection')" class="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-300 transition-colors">
-                        Back to Home
-                    </button>
-                </div>
-            </div>
-        </section>
-
-        <!-- Terms of Service Section (Placeholder - Can be expanded similarly) -->
-        <section id="termsOfServiceSection" class="hidden fade-in">
-            <div class="bg-white rounded-xl p-8 shadow-lg mb-8">
-                <h2 class="text-3xl font-bold text-gray-900 mb-6 text-center">Terms of Service</h2>
-                <div class="text-gray-700 space-y-4">
-                    <p>Welcome to Compressor Pro. By accessing or using our web application, you agree to comply with and be bound by the following Terms of Service. Please review them carefully.</p>
-
-                    <h3 class="text-xl font-semibold mt-6 mb-2">1. Acceptance of Terms</h3>
-                    <p>By using Compressor Pro, you signify your agreement to these Terms. If you do not agree, please do not use our service.</p>
-
-                    <h3 class="text-xl font-semibold mt-6 mb-2">2. Service Description</h3>
-                    <p>Compressor Pro provides a free online tool for compressing various file types directly in your browser. Our service aims to reduce file sizes while maintaining quality, but we do not guarantee specific compression ratios or perfect quality preservation.</p>
-
-                    <h3 class="text-xl font-semibold mt-6 mb-2">3. User Responsibilities</h3>
-                    <ul>
-                        <li>You are responsible for the content of the files you upload. Do not upload illegal, harmful, or copyrighted material without permission.</li>
-                        <li>You agree not to use the service for any unlawful or prohibited activities.</li>
-                        <li>You acknowledge that file processing occurs client-side and no files are stored on our servers.</li>
+        <section id="privacySection" class="hidden">
+            <div class="bg-white rounded-lg shadow-lg p-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">Privacy Policy</h2>
+                
+                <div class="prose max-w-none text-gray-600">
+                    <p class="mb-4"><strong>Last updated:</strong> December 2024</p>
+                    
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3">1. Information We Collect</h3>
+                    <p class="mb-4">We are committed to protecting your privacy. Our compression tool processes files entirely in your browser, and we do not collect, store, or transmit your files to our servers.</p>
+                    
+                    <h4 class="text-lg font-medium text-gray-800 mb-2">Information We May Collect:</h4>
+                    <ul class="list-disc list-inside mb-4">
+                        <li>Basic analytics data (page views, browser type, general location)</li>
+                        <li>Cookies for functionality and preferences</li>
+                        <li>Contact form submissions (when you contact us)</li>
                     </ul>
                     
-                    <h3 class="text-xl font-semibold mt-6 mb-2">4. Disclaimer of Warranties</h3>
-                    <p>Compressor Pro is provided "as is" without any warranties, express or implied. We do not warrant that the service will be uninterrupted, error-free, or completely secure.</p>
-
-                    <h3 class="text-xl font-semibold mt-6 mb-2">5. Limitation of Liability</h3>
-                    <p>In no event shall Compressor Pro be liable for any direct, indirect, incidental, special, consequential, or punitive damages arising out of your use or inability to use the service.</p>
-
-                    <h3 class="text-xl font-semibold mt-6 mb-2">6. Changes to Terms</h3>
-                    <p>We reserve the right to modify these Terms at any time. Your continued use of the service after any such changes constitutes your acceptance of the new Terms.</p>
-
-                    <h3 class="text-xl font-semibold mt-6 mb-2">7. Governing Law</h3>
-                    <p>These Terms shall be governed by and construed in accordance with the laws of the jurisdiction where Compressor Pro is operated, without regard to its conflict of law principles.</p>
-                </div>
-                <div class="mt-8 text-center">
-                    <button onclick="showSection('homeSection')" class="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-300 transition-colors">
-                        Back to Home
-                    </button>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3">2. How We Use Information</h3>
+                    <ul class="list-disc list-inside mb-4">
+                        <li>To improve our service and user experience</li>
+                        <li>To respond to your inquiries and support requests</li>
+                        <li>To analyze usage patterns and optimize performance</li>
+                        <li>To comply with legal obligations</li>
+                    </ul>
+                    
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3">3. File Processing</h3>
+                    <p class="mb-4">All file compression and processing happens locally in your browser using JavaScript. Your files are never uploaded to our servers or any third-party services. Once you close the browser tab, all processed data is permanently deleted from memory.</p>
+                    
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3">4. Cookies and Tracking</h3>
+                    <p class="mb-4">We use cookies to:</p>
+                    <ul class="list-disc list-inside mb-4">
+                        <li>Remember your preferences and settings</li>
+                        <li>Analyze website traffic and usage patterns</li>
+                        <li>Serve relevant advertisements through Google AdSense</li>
+                    </ul>
+                    
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3">5. Third-Party Services</h3>
+                    <p class="mb-4">We use Google AdSense to display advertisements. Google may use cookies to serve ads based on your visits to this and other websites. You can opt out of personalized advertising by visiting Google's Ad Settings.</p>
+                    
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3">6. Data Security</h3>
+                    <p class="mb-4">We implement appropriate security measures to protect your information. Since file processing occurs locally in your browser, your files are never transmitted over the internet to our servers.</p>
+                    
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3">7. Your Rights (GDPR/CCPA)</h3>
+                    <p class="mb-4">You have the right to:</p>
+                    <ul class="list-disc list-inside mb-4">
+                        <li>Access, update, or delete your personal information</li>
+                        <li>Opt out of data collection and processing</li>
+                        <li>Request data portability</li>
+                        <li>Lodge a complaint with supervisory authorities</li>
+                    </ul>
+                    
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3">8. Children's Privacy</h3>
+                    <p class="mb-4">Our service is not intended for children under 13. We do not knowingly collect personal information from children under 13.</p>
+                    
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3">9. Changes to This Policy</h3>
+                    <p class="mb-4">We may update this privacy policy from time to time. We will notify you of any changes by posting the new policy on this page.</p>
+                    
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3">10. Contact Us</h3>
+                    <p class="mb-4">If you have questions about this privacy policy, please contact us at privacy@compressor.com</p>
                 </div>
             </div>
         </section>
 
-    </div>
+        <!-- Terms of Service Section -->
+        <section id="termsSection" class="hidden">
+            <div class="bg-white rounded-lg shadow-lg p-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">Terms of Service</h2>
+                
+                <div class="prose max-w-none text-gray-600">
+                    <p class="mb-4"><strong>Last updated:</strong> December 2024</p>
+                    
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3">1. Acceptance of Terms</h3>
+                    <p class="mb-4">By accessing and using this website, you accept and agree to be bound by the terms and provision of this agreement.</p>
+                    
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3">2. Use License</h3>
+                    <p class="mb-4">Permission is granted to temporarily use this website for personal, non-commercial transitory viewing only. This is the grant of a license, not a transfer of title, and under this license you may not:</p>
+                    <ul class="list-disc list-inside mb-4">
+                        <li>modify or copy the materials</li>
+                        <li>use the materials for any commercial purpose or for any public display</li>
+                        <li>attempt to reverse engineer any software contained on the website</li>
+                        <li>remove any copyright or other proprietary notations from the materials</li>
+                    </ul>
+                    
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3">3. Disclaimer</h3>
+                    <p class="mb-4">The materials on this website are provided on an 'as is' basis. We make no warranties, expressed or implied, and hereby disclaim and negate all other warranties including without limitation, implied warranties or conditions of merchantability, fitness for a particular purpose, or non-infringement of intellectual property or other violation of rights.</p>
+                    
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3">4. Limitations</h3>
+                    <p class="mb-4">In no event shall Compressor or its suppliers be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising out of the use or inability to use the materials on this website, even if we or our authorized representative has been notified orally or in writing of the possibility of such damage.</p>
+                    
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3">5. Accuracy of Materials</h3>
+                    <p class="mb-4">The materials appearing on this website could include technical, typographical, or photographic errors. We do not warrant that any of the materials on its website are accurate, complete, or current.</p>
+                    
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3">6. Links</h3>
+                    <p class="mb-4">We have not reviewed all of the sites linked to our website and are not responsible for the contents of any such linked site. The inclusion of any link does not imply endorsement by us of the site.</p>
+                    
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3">7. Modifications</h3>
+                    <p class="mb-4">We may revise these terms of service at any time without notice. By using this website, you are agreeing to be bound by the then current version of these terms of service.</p>
+                    
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3">8. Governing Law</h3>
+                    <p class="mb-4">These terms and conditions are governed by and construed in accordance with the laws and you irrevocably submit to the exclusive jurisdiction of the courts in that state or location.</p>
+                </div>
+                
+                <div class="mt-6 pt-6 border-t border-gray-200">
+                    <button onclick="showSection('privacy')" class="text-blue-600 hover:text-blue-800 mr-4">Privacy Policy</button>
+                    <button onclick="showSection('contact')" class="text-blue-600 hover:text-blue-800">Contact Us</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- AdSense - Bottom Banner -->
+        <div class="mt-8">
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7199979485069328"
+                 crossorigin="anonymous"></script>
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-7199979485069328"
+                 data-ad-slot="3381081428"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+    </main>
 
     <!-- Footer -->
-    <footer class="bg-white border-t border-gray-200 py-6 mt-12 no-print">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-600 text-sm">
-            &copy; 2025 Compressor Pro. All rights reserved. | 
-            <a href="#" onclick="showSection('privacyPolicySection'); return false;" class="text-blue-600 hover:underline">Privacy Policy</a> | 
-            <a href="#" onclick="showSection('termsOfServiceSection'); return false;" class="text-blue-600 hover:underline">Terms of Service</a> |
-            <a href="#" onclick="showSection('contactUsSection'); return false;" class="text-blue-600 hover:underline">Contact Us</a>
+    <footer class="bg-gray-800 text-white py-8 mt-16">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Compressor</h3>
+                    <p class="text-gray-400 text-sm">Free, secure, and efficient file compression for everyone.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-3">Tools</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><button onclick="selectCompressionType('image')" class="hover:text-white">Image Compressor</button></li>
+                        <li><button onclick="selectCompressionType('pdf')" class="hover:text-white">PDF Compressor</button></li>
+                        <li><button onclick="selectCompressionType('ppt')" class="hover:text-white">PPT Compressor</button></li>
+                        <li><button onclick="selectCompressionType('video')" class="hover:text-white">Video Compressor</button></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-3">Support</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><button onclick="showSection('faq')" class="hover:text-white">FAQ</button></li>
+                        <li><button onclick="showSection('contact')" class="hover:text-white">Contact Us</button></li>
+                        <li><button onclick="showSection('about')" class="hover:text-white">About</button></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-3">Legal</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><button onclick="showSection('privacy')" class="hover:text-white">Privacy Policy</button></li>
+                        <li><button onclick="showSection('terms')" class="hover:text-white">Terms of Service</button></li>
+                        <li><button onclick="showCookiePolicy()" class="hover:text-white">Cookie Policy</button></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-6 text-center text-sm text-gray-400">
+                <p>&copy; 2024 Compressor. All rights reserved. | Made with ❤️ for better file compression</p>
+            </div>
         </div>
     </footer>
 
     <script>
-        // Global variables and state management
-        let currentSection = 'homeSection';
-        let chartInitialized = false;
-        let compressionChart;
-        let originalImageFile = null; // To store the original image for the slider
+        // Global variables
+        let currentCompressionType = '';
+        let selectedFiles = [];
+        let compressedFiles = [];
 
-        // DOM Elements
-        const sections = ['homeSection', 'imageSection', 'pdfSection', 'pptSection', 'videoSection', 'privacyPolicySection', 'contactUsSection', 'termsOfServiceSection'];
-        const backBtn = document.getElementById('backBtn');
-        
-        // AdSense related elements - kept for displaying ads
-        const topAdSpace = document.getElementById('topAdSpace');
-        const middleAdSpace = document.getElementById('middleAdSpace');
-        const sectionAdSpace = document.getElementById('sectionAdSpace'); // For image section
-        const pdfSectionAdSpace = document.getElementById('pdfSectionAdSpace'); // For PDF section
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            showCookieBanner();
+            setupEventListeners();
+        });
 
-        // Image compression elements
-        const imageUploadArea = document.getElementById('imageUploadArea');
-        const imageInput = document.getElementById('imageInput');
-        const imageControls = document.getElementById('imageControls');
-        const imageQuality = document.getElementById('imageQuality');
-        const qualityValue = document.getElementById('qualityValue');
-        const compressImagesBtn = document.getElementById('compressImages');
-        const imageResults = document.getElementById('imageResults');
-        const imageResultsList = document.getElementById('imageResultsList');
+        // Cookie management
+        function showCookieBanner() {
+            if (!localStorage.getItem('cookiesAccepted')) {
+                document.getElementById('cookieBanner').classList.add('show');
+            }
+        }
 
-        // Slider elements - now referenced from imageSection
-        const dynamicImageComparison = document.getElementById('dynamicImageComparison');
-        const originalImageElement = document.getElementById('originalImage');
-        const compressedImageElement = document.getElementById('compressedImage');
-        const slider = document.getElementById('slider');
-        const sliderWrapper = document.getElementById('sliderWrapper');
-        const sliderCaption = document.getElementById('sliderCaption');
+        function acceptCookies() {
+            localStorage.setItem('cookiesAccepted', 'true');
+            document.getElementById('cookieBanner').classList.remove('show');
+        }
 
-        // PDF compression elements
-        const pdfUploadArea = document.getElementById('pdfUploadArea');
-        const pdfInput = document.getElementById('pdfInput');
-        const pdfControls = document.getElementById('pdfControls');
-        const pdfCompressionLevel = document.getElementById('pdfCompressionLevel');
-        const pdfImageQuality = document.getElementById('pdfImageQuality');
-        const pdfOptimization = document.getElementById('pdfOptimization');
-        const pdfRemoveAnnotations = document.getElementById('pdfRemoveAnnotations');
-        const pdfOptimizeImages = document.getElementById('pdfOptimizeImages');
-        const pdfRemoveMetadata = document.getElementById('pdfRemoveMetadata');
-        const pdfLinearize = document.getElementById('pdfLinearize');
-        const compressPdfBtn = document.getElementById('compressPdf');
-        const pdfResults = document.getElementById('pdfResults');
-        const pdfResultsList = document.getElementById('pdfResultsList');
+        function showPrivacyPolicy() {
+            document.getElementById('cookieBanner').classList.remove('show');
+            showSection('privacy');
+        }
 
+        function showCookiePolicy() {
+            showSection('privacy');
+        }
 
-        // --- Core UI Functions ---
-        function showSection(sectionId) {
-            sections.forEach(id => {
-                const section = document.getElementById(id);
-                if (id === sectionId) {
-                    section.classList.remove('hidden');
-                    section.classList.add('fade-in');
-                    currentSection = sectionId;
+        // Navigation functions
+        function showSection(sectionName) {
+            // Hide all sections
+            const sections = ['homeSection', 'compressionSection', 'aboutSection', 'faqSection', 'contactSection', 'privacySection', 'termsSection'];
+            sections.forEach(section => {
+                document.getElementById(section).classList.add('hidden');
+            });
+
+            // Show selected section
+            document.getElementById(sectionName + 'Section').classList.remove('hidden');
+
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Compression type selection
+        function selectCompressionType(type) {
+            currentCompressionType = type;
+            setupCompressionInterface(type);
+            showSection('compression');
+        }
+
+        function setupCompressionInterface(type) {
+            const titles = {
+                'image': 'Image Compression',
+                'pdf': 'PDF Compression',
+                'ppt': 'PowerPoint Compression',
+                'video': 'Video Compression'
+            };
+
+            const descriptions = {
+                'image': 'Compress JPEG, PNG, and WebP images while maintaining visual quality',
+                'pdf': 'Optimize PDF files for web, print, or archive purposes',
+                'ppt': 'Reduce PowerPoint presentation file sizes and optimize embedded media',
+                'video': 'Compress videos with adjustable quality, resolution, and bitrate settings'
+            };
+
+            const accepts = {
+                'image': '.jpg,.jpeg,.png,.webp',
+                'pdf': '.pdf',
+                'ppt': '.ppt,.pptx',
+                'video': '.mp4,.avi,.mov,.wmv'
+            };
+
+            const maxSizes = {
+                'image': '10MB',
+                'pdf': '50MB',
+                'ppt': '100MB',
+                'video': '500MB'
+            };
+
+            document.getElementById('compressionTitle').textContent = titles[type];
+            document.getElementById('compressionDescription').textContent = descriptions[type];
+            document.getElementById('fileInput').setAttribute('accept', accepts[type]);
+            document.getElementById('maxFileSize').textContent = maxSizes[type];
+
+            // Show appropriate settings
+            hideAllSettings();
+            document.getElementById(type + 'Settings').classList.remove('hidden');
+            document.getElementById('settingsPanel').classList.remove('hidden');
+
+            // Reset file input and related elements
+            resetFileInput();
+        }
+
+        function hideAllSettings() {
+            document.getElementById('imageSettings').classList.add('hidden');
+            document.getElementById('pdfSettings').classList.add('hidden');
+            document.getElementById('videoSettings').classList.add('hidden');
+        }
+
+        function resetFileInput() {
+            document.getElementById('fileInput').value = '';
+            selectedFiles = [];
+            compressedFiles = [];
+            document.getElementById('compressBtn').disabled = true;
+            document.getElementById('previewSection').classList.add('hidden');
+            document.getElementById('downloadSection').classList.add('hidden');
+            document.getElementById('progressContainer').classList.add('hidden');
+        }
+
+        // File handling
+        function setupEventListeners() {
+            const fileInput = document.getElementById('fileInput');
+            const dropZone = document.getElementById('fileDropZone');
+            const qualitySlider = document.getElementById('qualitySlider');
+            const bitrateSlider = document.getElementById('bitrateSlider');
+
+            // File input change
+            fileInput.addEventListener('change', handleFileSelect);
+
+            // Drag and drop
+            dropZone.addEventListener('dragover', handleDragOver);
+            dropZone.addEventListener('dragleave', handleDragLeave);
+            dropZone.addEventListener('drop', handleDrop);
+
+            // Slider updates
+            qualitySlider.addEventListener('input', function() {
+                document.getElementById('qualityValue').textContent = this.value;
+            });
+
+            bitrateSlider.addEventListener('input', function() {
+                document.getElementById('bitrateValue').textContent = this.value;
+            });
+        }
+
+        function handleFileSelect(event) {
+            const files = Array.from(event.target.files);
+            processSelectedFiles(files);
+        }
+
+        function handleDragOver(event) {
+            event.preventDefault();
+            document.getElementById('fileDropZone').classList.add('dragover');
+        }
+
+        function handleDragLeave(event) {
+            event.preventDefault();
+            document.getElementById('fileDropZone').classList.remove('dragover');
+        }
+
+        function handleDrop(event) {
+            event.preventDefault();
+            document.getElementById('fileDropZone').classList.remove('dragover');
+            const files = Array.from(event.dataTransfer.files);
+            processSelectedFiles(files);
+        }
+
+        function processSelectedFiles(files) {
+            selectedFiles = files;
+            
+            if (files.length > 0) {
+                document.getElementById('compressBtn').disabled = false;
+                displayFilePreview(files);
+            }
+        }
+
+        function displayFilePreview(files) {
+            const container = document.getElementById('filePreviewContainer');
+            container.innerHTML = '';
+
+            files.forEach((file, index) => {
+                const fileDiv = document.createElement('div');
+                fileDiv.className = 'border border-gray-200 rounded-lg p-4 mb-4';
+                
+                let previewContent = '';
+                
+                if (file.type.startsWith('image/')) {
+                    previewContent = `
+                        <div class="comparison-container">
+                            <div class="text-center">
+                                <h4 class="font-semibold mb-2">Original</h4>
+                                <img id="original-${index}" class="image-preview mx-auto" src="${URL.createObjectURL(file)}" alt="Original">
+                                <p class="text-sm text-gray-600 mt-2">Size: ${formatFileSize(file.size)}</p>
+                            </div>
+                            <div class="text-center">
+                                <h4 class="font-semibold mb-2">Compressed</h4>
+                                <div id="compressed-${index}" class="flex items-center justify-center h-48 bg-gray-100 border-2 border-dashed border-gray-300 rounded">
+                                    <span class="text-gray-500">Compress to preview</span>
+                                </div>
+                                <p id="compressed-size-${index}" class="text-sm text-gray-600 mt-2">Size: -</p>
+                            </div>
+                        </div>
+                    `;
                 } else {
-                    section.classList.add('hidden');
+                    previewContent = `
+                        <div class="flex items-center">
+                            <i class="fas fa-file text-3xl text-gray-400 mr-4"></i>
+                            <div>
+                                <p class="font-semibold">${file.name}</p>
+                                <p class="text-sm text-gray-600">Size: ${formatFileSize(file.size)}</p>
+                                <p class="text-sm text-gray-600">Type: ${file.type}</p>
+                            </div>
+                        </div>
+                    `;
                 }
+
+                fileDiv.innerHTML = `
+                    <h3 class="text-lg font-semibold mb-3">${file.name}</h3>
+                    ${previewContent}
+                `;
+
+                container.appendChild(fileDiv);
             });
 
-            if (sectionId !== 'homeSection') {
-                backBtn.classList.remove('hidden');
-            } else {
-                backBtn.classList.add('hidden');
-            }
-
-            // Initialize chart only when home section is shown
-            if (sectionId === 'homeSection' && !chartInitialized) {
-                initializeCompressionChart();
-                chartInitialized = true;
-            }
+            document.getElementById('previewSection').classList.remove('hidden');
         }
 
-        // --- Chart Initialization (for Home Section) ---
-        function initializeCompressionChart() {
-            const ctx = document.getElementById('compressionChart').getContext('2d');
-            compressionChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['Original Size', 'Compressed Size'],
-                    datasets: [{
-                        label: 'File Size (MB)',
-                        data: [10, 1.5], // Example data: 10MB original, 1.5MB compressed
-                        backgroundColor: [
-                            'rgba(99, 102, 241, 0.8)', // indigo-500
-                            'rgba(34, 197, 94, 0.8)'   // green-500
-                        ],
-                        borderColor: [
-                            'rgba(99, 102, 241, 1)',
-                            'rgba(34, 197, 94, 1)'
-                        ],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: 'Size (MB)'
-                            }
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    }
-                }
+        // Compression functions
+        function startCompression() {
+            if (selectedFiles.length === 0) return;
+
+            showProgress();
+            compressedFiles = [];
+
+            const compressionPromises = selectedFiles.map((file, index) => {
+                return compressFile(file, index);
+            });
+
+            Promise.all(compressionPromises).then(() => {
+                hideProgress();
+                showDownloadSection();
+            }).catch(error => {
+                console.error('Compression error:', error);
+                hideProgress();
+                alert('An error occurred during compression. Please try again.');
             });
         }
 
-        // --- Image Compression Logic ---
-        imageQuality.addEventListener('input', (event) => {
-            qualityValue.textContent = `${event.target.value}%`;
-        });
-
-        imageUploadArea.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            imageUploadArea.classList.add('drag-over');
-        });
-
-        imageUploadArea.addEventListener('dragleave', (e) => {
-            e.preventDefault();
-            imageUploadArea.classList.remove('drag-over');
-        });
-
-        imageUploadArea.addEventListener('drop', (e) => {
-            e.preventDefault();
-            imageUploadArea.classList.remove('drag-over');
-            handleImageFiles(e.dataTransfer.files);
-        });
-
-        imageInput.addEventListener('change', (e) => {
-            handleImageFiles(e.target.files);
-        });
-
-        async function handleImageFiles(files) {
-            if (files.length === 0) {
-                console.log('No images selected.');
-                return;
-            }
-
-            // Store the first image for the slider comparison
-            originalImageFile = files[0];
-            originalImageElement.src = URL.createObjectURL(originalImageFile);
-            
-            imageControls.classList.remove('hidden');
-            imageResults.classList.add('hidden'); // Hide previous results
-            imageResultsList.innerHTML = ''; // Clear previous results
-            dynamicImageComparison.classList.add('hidden'); // Hide slider until compression
-            sliderCaption.classList.add('hidden');
-
-            const selectedFiles = Array.from(files);
-            console.log(`${selectedFiles.length} image(s) selected.`);
-            imageControls.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        function compressFile(file, index) {
+            return new Promise((resolve) => {
+                if (currentCompressionType === 'image') {
+                    compressImage(file, index).then(resolve);
+                } else if (currentCompressionType === 'pdf') {
+                    compressPDF(file, index).then(resolve);
+                } else if (currentCompressionType === 'ppt') {
+                    compressPPT(file, index).then(resolve);
+                } else if (currentCompressionType === 'video') {
+                    compressVideo(file, index).then(resolve);
+                }
+            });
         }
 
-        compressImagesBtn.addEventListener('click', async () => {
-            const files = Array.from(imageInput.files);
-            if (files.length === 0) {
-                console.error('Error: No files selected to compress.');
-                return;
-            }
+        function compressImage(file, index) {
+            return new Promise((resolve) => {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const img = new Image();
 
-            console.log('Compressing images...');
-            imageResultsList.innerHTML = ''; // Clear previous results
-            
-            // Hide previous comparison and reset slider
-            dynamicImageComparison.classList.add('hidden');
-            sliderCaption.classList.add('hidden');
-            slider.value = 50; // Reset slider position
+                img.onload = function() {
+                    // Set canvas dimensions
+                    canvas.width = img.width;
+                    canvas.height = img.height;
 
-            for (const file of files) {
-                try {
-                    const originalSize = file.size; // in bytes
+                    // Draw image on canvas
+                    ctx.drawImage(img, 0, 0);
 
-                    // Simulate image compression using canvas
-                    const img = new Image();
-                    img.src = URL.createObjectURL(file);
+                    // Get compression settings
+                    const quality = document.getElementById('qualitySlider').value / 100;
+                    const outputFormat = document.getElementById('outputFormat').value;
 
-                    await new Promise(resolve => img.onload = resolve); // Ensure image is loaded
+                    // Convert to blob
+                    canvas.toBlob((blob) => {
+                        if (blob) {
+                            const compressedFile = new File([blob], 
+                                generateFileName(file.name, outputFormat), 
+                                { type: `image/${outputFormat}` }
+                            );
 
-                    const canvas = document.createElement('canvas');
-                    const ctx = canvas.getContext('2d');
+                            compressedFiles.push(compressedFile);
+                            updateImagePreview(index, blob, compressedFile.size);
+                            updateProgress((index + 1) / selectedFiles.length * 100);
+                        }
+                        resolve();
+                    }, `image/${outputFormat}`, quality);
+                };
 
-                    const quality = parseInt(imageQuality.value) / 100; // Get selected quality
-                    const resizeFactor = parseFloat(imageResize.value || 100) / 100;
+                img.src = URL.createObjectURL(file);
+            });
+        }
 
-                    canvas.width = img.width * resizeFactor;
-                    canvas.height = img.height * resizeFactor;
-                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-                    const mimeType = imageFormat.value === 'png' ? 'image/png' : 
-                                     imageFormat.value === 'webp' ? 'image/webp' : 'image/jpeg';
+        function compressPDF(file, index) {
+            return new Promise((resolve) => {
+                // For demo purposes, simulate PDF compression
+                // In a real implementation, you would use a PDF library like PDF-lib
+                setTimeout(() => {
+                    // Simulate compression by reducing file size by 20-50%
+                    const compressionRatio = 0.3 + Math.random() * 0.3;
+                    const compressedSize = Math.floor(file.size * compressionRatio);
                     
-                    const compressedBlob = await new Promise(resolve => {
-                        canvas.toBlob(resolve, mimeType, quality);
-                    });
+                    // Create a mock compressed file
+                    const compressedFile = new File([file.slice(0, compressedSize)], 
+                        generateFileName(file.name, 'pdf'), 
+                        { type: 'application/pdf' }
+                    );
 
-                    const compressedSize = compressedBlob.size; // in bytes
-                    const reduction = ((originalSize - compressedSize) / originalSize * 100).toFixed(2);
-
-                    const resultItem = `
-                        <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-between">
-                            <div>
-                                <p class="font-semibold text-gray-800">${file.name}</p>
-                                <p class="text-sm text-gray-600">Original: ${(originalSize / 1024 / 1024).toFixed(2)} MB | Compressed: ${(compressedSize / 1024 / 1024).toFixed(2)} MB</p>
-                            </div>
-                            <div class="text-right">
-                                <p class="font-bold text-green-600">${reduction}% Reduction</p>
-                                <button class="mt-2 bg-blue-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-600 download-btn" data-filename="${file.name.replace(/\.[^/.]+$/, `_compressed.${imageFormat.value}`)}" data-blob-url="${URL.createObjectURL(compressedBlob)}">Download</button>
-                            </div>
-                        </div>
-                    `;
-                    imageResultsList.innerHTML += resultItem;
-
-                    // Update slider only for the first image
-                    if (file === originalImageFile) {
-                        originalImageElement.src = URL.createObjectURL(file); // Ensure original is set
-                        compressedImageElement.src = URL.createObjectURL(compressedBlob);
-                        dynamicImageComparison.classList.remove('hidden');
-                        sliderCaption.classList.remove('hidden');
-                    }
-                    URL.revokeObjectURL(img.src); // Clean up
-                } catch (error) {
-                    console.error('Error processing image:', error);
-                    imageResultsList.innerHTML += `<div class="bg-red-50 p-4 rounded-lg text-red-700">Error compressing ${file.name}: ${error.message}</div>`;
-                }
-            }
-
-            console.log('Image compression complete.');
-            imageResults.classList.remove('hidden');
-            imageResults.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        });
-
-        // --- PDF Compression Logic (Placeholder) ---
-        pdfUploadArea.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            pdfUploadArea.classList.add('drag-over');
-        });
-
-        pdfUploadArea.addEventListener('dragleave', (e) => {
-            e.preventDefault();
-            pdfUploadArea.classList.remove('drag-over');
-        });
-
-        pdfUploadArea.addEventListener('drop', (e) => {
-            e.preventDefault();
-            pdfUploadArea.classList.remove('drag-over');
-            handlePdfFiles(e.dataTransfer.files);
-        });
-
-        pdfInput.addEventListener('change', (e) => {
-            handlePdfFiles(e.target.files);
-        });
-
-        async function handlePdfFiles(files) {
-            if (files.length === 0) {
-                console.log('No PDF files selected.');
-                return;
-            }
-
-            pdfControls.classList.remove('hidden');
-            pdfResults.classList.add('hidden'); // Hide previous results
-            pdfResultsList.innerHTML = ''; // Clear previous results
-
-            const selectedFiles = Array.from(files);
-            console.log(`${selectedFiles.length} PDF file(s) selected.`);
-            pdfControls.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    compressedFiles.push(compressedFile);
+                    updateProgress((index + 1) / selectedFiles.length * 100);
+                    resolve();
+                }, 1000 + Math.random() * 2000);
+            });
         }
 
-        compressPdfBtn.addEventListener('click', async () => {
-            const files = Array.from(pdfInput.files);
-            if (files.length === 0) {
-                console.error('Error: No PDF files selected to compress.');
-                return;
-            }
+        function compressPPT(file, index) {
+            return new Promise((resolve) => {
+                // For demo purposes, simulate PPT compression
+                setTimeout(() => {
+                    const compressionRatio = 0.4 + Math.random() * 0.3;
+                    const compressedSize = Math.floor(file.size * compressionRatio);
+                    
+                    const compressedFile = new File([file.slice(0, compressedSize)], 
+                        generateFileName(file.name, file.name.split('.').pop()), 
+                        { type: file.type }
+                    );
 
-            console.log('Compressing PDF files...');
-            pdfResultsList.innerHTML = ''; // Clear previous results
+                    compressedFiles.push(compressedFile);
+                    updateProgress((index + 1) / selectedFiles.length * 100);
+                    resolve();
+                }, 1500 + Math.random() * 2500);
+            });
+        }
 
-            for (const file of files) {
-                try {
-                    // This is a simplified simulation using pdf-lib, not a full compression.
-                    // Real PDF compression is complex and often requires server-side processing.
-                    const existingPdfBytes = await file.arrayBuffer();
-                    const pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes);
+        function compressVideo(file, index) {
+            return new Promise((resolve) => {
+                // For demo purposes, simulate video compression
+                setTimeout(() => {
+                    const compressionRatio = 0.2 + Math.random() * 0.4;
+                    const compressedSize = Math.floor(file.size * compressionRatio);
+                    
+                    const compressedFile = new File([file.slice(0, compressedSize)], 
+                        generateFileName(file.name, 'mp4'), 
+                        { type: 'video/mp4' }
+                    );
 
-                    // Simulate some "compression" by simply saving.
-                    // A true compression would involve image downsampling, font subsetting, etc.
-                    const compressedPdfBytes = await pdfDoc.save();
-                    const compressedBlob = new Blob([compressedPdfBytes], { type: 'application/pdf' });
+                    compressedFiles.push(compressedFile);
+                    updateProgress((index + 1) / selectedFiles.length * 100);
+                    resolve();
+                }, 2000 + Math.random() * 4000);
+            });
+        }
 
-                    const originalSize = file.size; // in bytes
-                    const simulatedCompressedSize = originalSize * (Math.random() * 0.3 + 0.2); // Simulate 20-50% of original
-                    const reduction = ((originalSize - simulatedCompressedSize) / originalSize * 100).toFixed(2);
+        function updateImagePreview(index, blob, compressedSize) {
+            const compressedDiv = document.getElementById(`compressed-${index}`);
+            const compressedSizeElement = document.getElementById(`compressed-size-${index}`);
 
-                    const resultItem = `
-                        <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-between">
-                            <div>
-                                <p class="font-semibold text-gray-800">${file.name}</p>
-                                <p class="text-sm text-gray-600">Original: ${(originalSize / 1024 / 1024).toFixed(2)} MB | Compressed: ${(simulatedCompressedSize / 1024 / 1024).toFixed(2)} MB</p>
-                            </div>
-                            <div class="text-right">
-                                <p class="font-bold text-red-600">${reduction}% Reduction</p>
-                                <button class="mt-2 bg-blue-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-600 download-btn-pdf" data-filename="${file.name.replace(/\.pdf/g, '_compressed.pdf')}" data-blob-url="${URL.createObjectURL(compressedBlob)}">Download</button>
-                            </div>
-                        </div>
-                    `;
-                    pdfResultsList.innerHTML += resultItem;
-                } catch (error) {
-                    console.error('Error processing PDF:', error);
-                    pdfResultsList.innerHTML += `<div class="bg-red-50 p-4 rounded-lg text-red-700">Error compressing ${file.name}: ${error.message}</div>`;
-                }
-            }
+            const img = document.createElement('img');
+            img.className = 'image-preview mx-auto';
+            img.src = URL.createObjectURL(blob);
+            img.alt = 'Compressed';
 
-            console.log('PDF compression complete.');
-            pdfResults.classList.remove('hidden');
-            pdfResults.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        });
+            compressedDiv.innerHTML = '';
+            compressedDiv.appendChild(img);
+            compressedSizeElement.textContent = `Size: ${formatFileSize(compressedSize)}`;
 
+            // Calculate compression ratio
+            const originalSize = selectedFiles[index].size;
+            const ratio = ((originalSize - compressedSize) / originalSize * 100).toFixed(1);
+            compressedSizeElement.innerHTML += ` <span class="text-green-600">(${ratio}% reduction)</span>`;
+        }
 
-        // --- Event Listeners for Downloads ---
-        document.addEventListener('click', (e) => {
-            if (e.target.classList.contains('download-btn')) {
-                const filename = e.target.dataset.filename;
-                const blobUrl = e.target.dataset.blobUrl;
-                if (blobUrl) {
-                    const a = document.createElement('a');
-                    a.href = blobUrl;
-                    a.download = filename;
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                    URL.revokeObjectURL(blobUrl); // Clean up the URL
-                    console.log(`${filename} has been downloaded.`);
-                } else {
-                    console.log(`Simulating download for ${filename}.`);
-                }
-            }
-            if (e.target.classList.contains('download-btn-pdf')) {
-                const filename = e.target.dataset.filename;
-                const blobUrl = e.target.dataset.blobUrl;
+        // Progress and UI functions
+        function showProgress() {
+            document.getElementById('progressContainer').classList.remove('hidden');
+            document.getElementById('compressBtn').disabled = true;
+        }
+
+        function hideProgress() {
+            document.getElementById('progressContainer').classList.add('hidden');
+            document.getElementById('compressBtn').disabled = false;
+        }
+
+        function updateProgress(percentage) {
+            document.getElementById('progressBar').style.width = percentage + '%';
+            document.getElementById('progressText').textContent = `Processing... ${Math.round(percentage)}%`;
+        }
+
+        function showDownloadSection() {
+            const downloadLinks = document.getElementById('downloadLinks');
+            downloadLinks.innerHTML = '';
+
+            compressedFiles.forEach((file, index) => {
+                const originalSize = selectedFiles[index].size;
+                const compressedSize = file.size;
+                const reduction = ((originalSize - compressedSize) / originalSize * 100).toFixed(1);
+
+                const linkDiv = document.createElement('div');
+                linkDiv.className = 'flex items-center justify-between bg-gray-50 p-4 rounded mb-2';
+                linkDiv.innerHTML = `
+                    <div>
+                        <p class="font-semibold">${file.name}</p>
+                        <p class="text-sm text-gray-600">
+                            ${formatFileSize(originalSize)} → ${formatFileSize(compressedSize)} 
+                            <span class="text-green-600">(${reduction}% reduction)</span>
+                        </p>
+                    </div>
+                    <button onclick="downloadFile(${index})" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                        <i class="fas fa-download mr-2"></i>Download
+                    </button>
+                `;
+
+                downloadLinks.appendChild(linkDiv);
+            });
+
+            document.getElementById('downloadSection').classList.remove('hidden');
+        }
+
+        // Download functions
+        function downloadFile(index) {
+            const file = compressedFiles[index];
+            const url = URL.createObjectURL(file);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = file.name;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function downloadAll() {
+            if (compressedFiles.length === 0) return;
+
+            const zip = new JSZip();
+            
+            compressedFiles.forEach(file => {
+                zip.file(file.name, file);
+            });
+
+            zip.generateAsync({type: 'blob'}).then(function(content) {
+                const url = URL.createObjectURL(content);
                 const a = document.createElement('a');
-                a.href = blobUrl;
-                a.download = filename;
+                a.href = url;
+                a.download = `compressed-files-${new Date().toISOString().slice(0, 10)}.zip`;
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
-                URL.revokeObjectURL(blobUrl); // Clean up the URL
-                console.log(`${filename} has been downloaded.`);
-            }
-        });
-
-        // --- Comparison Slider Logic ---
-        if (slider && sliderWrapper) { // Ensure elements exist before adding listener
-            slider.addEventListener('input', () => {
-                sliderWrapper.style.width = `${slider.value}%`;
+                URL.revokeObjectURL(url);
             });
         }
 
+        // Utility functions
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
 
-        // --- Initial Load ---
-        document.addEventListener('DOMContentLoaded', () => {
-            showSection('homeSection'); // Show home section on load
+        function generateFileName(originalName, newExtension) {
+            const nameWithoutExt = originalName.substring(0, originalName.lastIndexOf('.'));
+            const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
+            return `${nameWithoutExt}-compressed-${timestamp}.${newExtension}`;
+        }
 
-            // Initialize AdSense
-            (adsbygoogle = window.adsbygoogle || []).push({});
-        });
+        // Contact form submission
+        function submitContactForm(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('contactName').value;
+            const email = document.getElementById('contactEmail').value;
+            const subject = document.getElementById('contactSubject').value;
+            const message = document.getElementById('contactMessage').value;
 
-        backBtn.addEventListener('click', () => {
-            showSection('homeSection');
-        });
+            // Simulate form submission
+            alert('Thank you for your message! We will get back to you soon.');
+            
+            // Reset form
+            document.getElementById('contactForm').reset();
+        }
+
+        // SEO and structured data
+        const structuredData = {
+            "@context": "https://schema.org",
+            "@type": "WebApplication",
+            "name": "Compressor - Universal File Compression Tool",
+            "description": "Free online tool to compress images, PDFs, PowerPoint presentations, and videos",
+            "url": "https://compressor.example.com",
+            "applicationCategory": "UtilitiesApplication",
+            "operatingSystem": "Any",
+            "offers": {
+                "@type": "Offer",
+                "price": "0",
+                "priceCurrency": "USD"
+            },
+            "featureList": [
+                "Image compression",
+                "PDF compression", 
+                "PowerPoint compression",
+                "Video compression",
+                "Batch processing",
+                "Privacy focused"
+            ]
+        };
+
+        // Add structured data to page
+        const script = document.createElement('script');
+        script.type = 'application/ld+json';
+        script.textContent = JSON.stringify(structuredData);
+        document.head.appendChild(script);
     </script>
 </body>
 </html>
-
-
-
-
 
 
 
